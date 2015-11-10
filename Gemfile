@@ -32,6 +32,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.3.3'
   gem 'factory_girl_rails', '~> 4.5.0'
   gem 'rubocop', '~> 0.34.2'
+  gem 'rubocop-checkstyle_formatter', '~> 0.2.0', require: false
 end
 
 gem 'angular-rails-templates', '~> 0.2.0'
