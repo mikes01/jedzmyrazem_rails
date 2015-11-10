@@ -46,6 +46,8 @@ group :development, :test do
   gem 'rails-assets-angular-mocks', '~> 1.4.7'
 end
 
+gem 'devise', '~> 3.5.2'
+
 gem 'angular-rails-templates', '~> 0.2.0'
 gem 'sprockets', '~> 2.12.3'
 gem 'slim-rails', '~> 0.2.1'
