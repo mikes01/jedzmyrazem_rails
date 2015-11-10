@@ -38,6 +38,12 @@ group :development, :test do
   gem 'simplecov-rcov', '~> 0.2.3'
   gem 'ci_reporter', '~> 2.0.0'
   gem 'ci_reporter_rspec', '~> 1.0.0'
+
+  gem 'coffeelint', '~> 1.11.0'
+
+  gem 'teaspoon-jasmine', '~> 2.3.4'
+  gem 'phantomjs', '~> 1.9.8.0'
+  gem 'rails-assets-angular-mocks', '~> 1.4.7'
 end
 
 gem 'angular-rails-templates', '~> 0.2.0'

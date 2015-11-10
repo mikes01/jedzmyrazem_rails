@@ -2,4 +2,5 @@ angular.module('JedzmyrazemApp', ['templates', 'ui.router'])
   .config ($provide, $httpProvider) ->
     # CSFR token
     $httpProvider.defaults.headers.common['X-CSRF-Token'] =
-      angular.element(document.querySelector('meta[name=csrf-token]')).attr('content')
+      angular.element(document.querySelector('meta[name=csrf-token]'))
+        .attr('content')
