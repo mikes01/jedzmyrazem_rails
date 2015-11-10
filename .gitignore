@@ -17,3 +17,5 @@
 /tmp
 /reports
 /Gemfile.lock
+/coverage/
+/spec/reports/
