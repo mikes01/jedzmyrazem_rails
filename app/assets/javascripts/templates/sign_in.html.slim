@@ -1,0 +1,11 @@
+form.simple-form novalidate="" 
+  | E-mail:
+  input ng-model="user.email" type="text"
+  br
+  | Hasło:
+  input ng-model="user.password" type="password"
+  br
+  input ng-click="signIn()" type="button" value="Zaloguj"
+  input ng-click="goToSignUp()" type="button" value="Zarejestruj się"
+  br
+  a href="#/reset_password" Zapomniałem hasła

@@ -55,4 +55,6 @@ gem 'slim-rails', '~> 0.2.1'
 source 'https://rails-assets.org' do
   gem 'rails-assets-angular', '~> 1.4.7'
   gem 'rails-assets-angular-ui-router', '~> 0.2.15'
+  gem 'rails-assets-angular-devise'
+  gem 'rails-assets-bootstrap'
 end
