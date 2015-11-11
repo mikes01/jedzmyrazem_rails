@@ -24,6 +24,7 @@ angular.module('JedzmyrazemApp')
     $scope.signIn = () ->
       credentials = {email: $scope.user.email, password: $scope.user.password}
       Auth.login(credentials, null).then((user) ->
+        console.log user
         $location.path('/home')
       (error) ->
         console.log error
