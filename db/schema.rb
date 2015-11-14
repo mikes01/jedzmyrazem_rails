@@ -11,11 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151110170303) do
+ActiveRecord::Schema.define(version: 20151114191621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
+
+  create_table "journeys", force: :cascade do |t|
+    t.integer  "driver_id",  null: false
+    t.date     "date",       null: false
+    t.integer  "spaces",     null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "journeys", ["date"], name: "index_journeys_on_date", using: :btree
+  add_index "journeys", ["driver_id"], name: "index_journeys_on_driver_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                                 default: "", null: false
