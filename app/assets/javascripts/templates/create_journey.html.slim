@@ -16,6 +16,9 @@ div ng-repeat="place in chosenPlace track by $index"
       button.btn.btn-default ng-click="removeWayPoint($index)" ng-hide="$index == 0 || $index == chosenPlace.length-1" X
     .col-md-2
       uib-timepicker ng-model="times[$index]" show-meridian="false" ng-change="updateTime($index, {{times[$index]}})"
+
+div
+  input type="number" min="1" max="8" value="1"
 div
   button.btn.btn-default ng-click="addWayPoint()" Dodaj punkt pośredni
 
