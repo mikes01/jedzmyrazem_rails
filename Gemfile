@@ -55,6 +55,11 @@ gem 'slim-rails', '~> 0.2.1'
 source 'https://rails-assets.org' do
   gem 'rails-assets-angular', '~> 1.4.7'
   gem 'rails-assets-angular-ui-router', '~> 0.2.15'
-  gem 'rails-assets-angular-devise'
-  gem 'rails-assets-bootstrap'
+  gem 'rails-assets-angular-devise', '~> 1.1.0'
+  gem 'rails-assets-bootstrap', '~> 3.3.5'
+  gem 'rails-assets-ngmap', '~> 1.14.9'
+  gem 'rails-assets-angular-google-places-autocomplete', '~> 0.2.7'
+  gem 'rails-assets-angular-ui-bootstrap-bower', '0.14.3'
+  gem 'rails-assets-angular-i18n', '~> 1.4.7'
+  gem 'rails-assets-moment', '~> 2.10.6'
 end

@@ -7,6 +7,11 @@
 #= require routes
 #= require jquery
 #= require bootstrap
+#= require ngmap
+#= require angular-google-places-autocomplete
+#= require angular-ui-bootstrap-bower
+#= require angular-i18n/angular-locale_pl-pl
+#= require moment
 
 
 #= require_tree ./templates

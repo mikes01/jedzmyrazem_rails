@@ -33,3 +33,8 @@ angular.module 'JedzmyrazemApp'
         controller: 'UnloggedUserCtrl',
         templateUrl: 'edit_password.html'
       })
+      .state('create_journey', {
+        url: '/create_journey',
+        controller: 'JourneyCtrl',
+        templateUrl: 'create_journey.html'
+      })
