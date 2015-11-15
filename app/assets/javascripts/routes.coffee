@@ -38,3 +38,8 @@ angular.module 'JedzmyrazemApp'
         controller: 'JourneyCtrl',
         templateUrl: 'create_journey.html'
       })
+      .state('search_journey', {
+        url: '/search_journey',
+        controller: 'SearchJourneyCtrl',
+        templateUrl: 'search_journey.html'
+      })

@@ -1,0 +1,14 @@
+div
+  .row
+    .col-md-2
+      input ng-model="startPlace" g-places-autocomplete="" options="autocompleteOptions" force-selection="true"
+      input ng-model="finishPlace" g-places-autocomplete="" options="autocompleteOptions" force-selection="true"
+    .col-md-2
+      uib-timepicker ng-model="startTime" show-meridian="false"
+    .col-md-2
+      p.input-group
+        input.form-control close-text="Close" datepicker-options="dateOptions" is-open="status.opened" min-date="minDate" ng-model="dt" ng-required="true" type="text" uib-datepicker-popup="{{format}}" ng-change="checkMinTime()"
+        span.input-group-btn
+          button.btn.btn-default ng-click="open($event)" type="button" 
+            i.glyphicon.glyphicon-calendar
+      button.btn.btn-default ng-click="search()" Szukaj
