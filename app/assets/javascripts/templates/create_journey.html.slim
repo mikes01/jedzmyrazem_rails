@@ -18,7 +18,8 @@ div ng-repeat="place in chosenPlace track by $index"
       uib-timepicker ng-model="times[$index]" show-meridian="false" ng-change="updateTime($index, {{times[$index]}})"
 
 div
-  input type="number" min="1" max="8" value="1"
+  input type="number" min="1" max="8" value="1" ng-model="spaces"
 div
   button.btn.btn-default ng-click="addWayPoint()" Dodaj punkt pośredni
-
+div
+  button.btn.btn-default ng-click="saveJourney()" Zapisz przejazd

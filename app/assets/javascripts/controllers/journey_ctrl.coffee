@@ -1,6 +1,6 @@
 angular.module 'JedzmyrazemApp'
   .controller 'JourneyCtrl',
-  ($http, $scope, $location, $rootScope, $filter, Auth)->
+  ($http, $scope, $location, $rootScope, $filter, Auth, Journey)->
 
     directionsService = new google.maps.DirectionsService()
     _directionsRenderer = ""
@@ -138,3 +138,18 @@ angular.module 'JedzmyrazemApp'
         $scope.times[i] = moment($scope.times[i-1])
         .add(points[i-1].duration.value, 's')
         i++
+
+    $scope.saveJourney = () ->
+      i = 0
+      journey = {path: [], date: moment($scope.dt).format("YYYY-MM-DD"),
+      spaces: $scope.spaces}
+      while(i < $scope.chosenPlace.length)
+        journey.path.push {time: moment($scope.times[i]).format("HH:mm"),
+        point: []}
+        journey.path[i].point.push $scope.chosenPlace[i].geometry.location.lat()
+        journey.path[i].point.push $scope.chosenPlace[i].geometry.location.lng()
+        i++
+      Journey.createJourney(journey).success (data) ->
+        console.log data
+      .error (data) ->
+        console.log data
