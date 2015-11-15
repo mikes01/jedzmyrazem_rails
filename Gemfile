@@ -6,6 +6,7 @@ gem 'rails', '4.2.3'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.18.2'
 gem 'activerecord-postgis-adapter', '~> 3.0.0'
+gem 'rgeo'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151114201135) do
+ActiveRecord::Schema.define(version: 20151114221957) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,8 +49,9 @@ ActiveRecord::Schema.define(version: 20151114201135) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "waypoints", force: :cascade do |t|
-    t.integer "journey_id", null: false
-    t.time    "time",       null: false
+    t.integer   "journey_id",                                                          null: false
+    t.time      "time",                                                                null: false
+    t.geography "point",      limit: {:srid=>4326, :type=>"point", :geographic=>true}, null: false
   end
 
   add_index "waypoints", ["journey_id"], name: "index_waypoints_on_journey_id", using: :btree
