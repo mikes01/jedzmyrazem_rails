@@ -3,4 +3,6 @@ Rails.application.routes.draw do
   root 'home#index'
 
   resources :journeys
+
+  post 'journeys/search', to: 'journeys#search'
 end

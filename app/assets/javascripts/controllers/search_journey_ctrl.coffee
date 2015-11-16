@@ -27,3 +27,16 @@ angular.module 'JedzmyrazemApp'
       startingDay: 1
     $scope.format = 'dd.MM.yyyy'
     $scope.status = opened: false
+
+    $scope.search = () ->
+      params = {date: moment($scope.dt).format("YYYY-MM-DD"),
+      start_time: moment($scope.startTime).format("HH:mm"),
+      start_lat: $scope.startPlace.geometry.location.lat()
+      start_lng: $scope.startPlace.geometry.location.lng(),
+      finish_lat: $scope.finishPlace.geometry.location.lat(),
+      finish_lng: $scope.finishPlace.geometry.location.lng()}
+
+      Journey.searchJourney(params).success (data) ->
+        console.log data
+      .error (data) ->
+        console.log data
