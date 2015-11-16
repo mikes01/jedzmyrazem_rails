@@ -63,4 +63,5 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-angular-ui-bootstrap-bower', '0.14.3'
   gem 'rails-assets-angular-i18n', '~> 1.4.7'
   gem 'rails-assets-moment', '~> 2.10.6'
+  gem 'rails-assets-fontawesome'
 end

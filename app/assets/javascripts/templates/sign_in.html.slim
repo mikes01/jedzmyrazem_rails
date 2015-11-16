@@ -1,11 +1,19 @@
-form.simple-form novalidate="" 
-  | E-mail:
-  input ng-model="user.email" type="text"
-  br
-  | Hasło:
-  input ng-model="user.password" type="password"
-  br
-  input ng-click="signIn()" type="button" value="Zaloguj"
-  input ng-click="goToSignUp()" type="button" value="Zarejestruj się"
-  br
-  a href="#/reset_password" Zapomniałem hasła
+.login-img3-body
+  .container
+    .login-form
+      .login-wrap
+        p.login-img
+          i.icon_lock_alt
+        .input-group
+          span.input-group-addon
+            i.icon_mail
+          input.form-control autofocus="" ng-model="user.email" placeholder="Email" type="text" /
+        .input-group
+          span.input-group-addon
+            i.icon_key_alt
+          input.form-control ng-model="user.password" placeholder="Hasło" type="password" /
+        label.checkbox
+          span.pull-right
+            a href="#/reset_password"  Nie pamiętasz hasła?
+        button.btn.btn-primary.btn-lg.btn-block ng-click="signIn()"  Zaloguj się
+        button.btn.btn-info.btn-lg.btn-block ng-click="goToSignUp()"  Utwórz konto
