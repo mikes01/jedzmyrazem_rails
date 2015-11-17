@@ -1,20 +1,31 @@
-form.simple-form novalidate="" 
-  | E-mail:
-  input ng-model="user.email" type="email"
-  br
-  | Username:
-  input ng-model="user.username" type="text"
-  br
-  | Telefon:
-  input ng-model="user.phone" type="text"
-  br
-  | Nowe Hasło:
-  input ng-model="user.password" type="password"
-  br
-  | Potwierdź nowe hasło:
-  input ng-model="user.password_confirmation" type="password"
-  br
-  | Aktualne hasło:
-  input ng-model="user.current_password" type="password"
-  br
-  input ng-click="editUser()" type="button" value="Edytuj"
+.login-img3-body
+  .container
+    .login-form
+      .login-wrap
+        p.login-img
+          i.icon_lock_alt
+        .input-group
+          span.input-group-addon
+            i.icon_mail
+          input.form-control autofocus="" ng-model="user.email" placeholder="Email" type="email" /
+        .input-group
+          span.input-group-addon
+            i.icon_profile
+          input.form-control autofocus="" ng-model="user.username" placeholder="Nazwa użytkownika" type="text" /
+        .input-group
+          span.input-group-addon
+            i.icon_phone
+          input.form-control autofocus="" ng-model="user.phone" placeholder="Numer telefonu" type="text" /
+        .input-group
+          span.input-group-addon
+            i.icon_key_alt
+          input.form-control ng-model="user.password" placeholder="Hasło" type="password" /
+        .input-group
+          span.input-group-addon
+            i.icon_key_alt
+          input.form-control ng-model="user.password_confirmation" placeholder="Potwierdź hasło" type="password" /
+        .input-group
+          span.input-group-addon
+            i.icon_key_alt
+          input.form-control ng-model="user.current_password" placeholder="Aktualne hasło" type="password" /
+        button.btn.btn-primary.btn-lg.btn-block ng-click="editUser()" Edytuj
