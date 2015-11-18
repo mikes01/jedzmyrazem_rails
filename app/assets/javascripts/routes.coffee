@@ -3,9 +3,14 @@ angular.module 'JedzmyrazemApp'
     $urlRouterProvider.otherwise('home')
 
     $stateProvider
+      .state('index', {
+        abstract: true,
+        templateUrl: 'layout.html',
+      })
       .state('home', {
+        parent: 'index',
         url: '/home',
-        controller: 'HomeCtrl',
+        controller: 'SearchJourneyCtrl',
         templateUrl: 'home.html'
       })
       .state('sign_in', {
@@ -34,12 +39,8 @@ angular.module 'JedzmyrazemApp'
         templateUrl: 'edit_password.html'
       })
       .state('create_journey', {
+        parent: 'index',
         url: '/create_journey',
         controller: 'JourneyCtrl',
         templateUrl: 'create_journey.html'
-      })
-      .state('search_journey', {
-        url: '/search_journey',
-        controller: 'SearchJourneyCtrl',
-        templateUrl: 'search_journey.html'
       })

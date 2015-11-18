@@ -1,24 +1,26 @@
-div
-  map center="{{map.center}}" zoom="{{map.zoom}}" width="100%"
-div.row
-  .col-md-2
-    p.input-group
-      input.form-control close-text="Close" datepicker-options="dateOptions" is-open="status.opened" min-date="minDate" ng-model="dt" ng-required="true" type="text" uib-datepicker-popup="{{format}}" ng-change="checkMinTime()"
-      span.input-group-btn
-        button.btn.btn-default ng-click="open($event)" type="button" 
-          i.glyphicon.glyphicon-calendar
+section#main-content
+  section.wrapper
+    div
+      map center="{{map.center}}" zoom="{{map.zoom}}" width="100%"
+    div.row
+      .col-md-2
+        p.input-group
+          input.form-control close-text="Close" datepicker-options="dateOptions" is-open="status.opened" min-date="minDate" ng-model="dt" ng-required="true" type="text" uib-datepicker-popup="{{format}}" ng-change="checkMinTime()"
+          span.input-group-btn
+            button.btn.btn-default ng-click="open($event)" type="button" 
+              i.glyphicon.glyphicon-calendar
 
-div ng-repeat="place in chosenPlace track by $index"
-  .row
-    .col-md-2
-      input ng-model="chosenPlace[$index]" g-places-autocomplete="" options="autocompleteOptions" force-selection="true" ng-change="getRoutePointsAndWaypoints()"
-      button.btn.btn-default ng-click="removeWayPoint($index)" ng-hide="$index == 0 || $index == chosenPlace.length-1" X
-    .col-md-2
-      uib-timepicker ng-model="times[$index]" show-meridian="false" ng-change="updateTime($index, {{times[$index]}})"
+    div ng-repeat="place in chosenPlace track by $index"
+      .row
+        .col-md-2
+          input ng-model="chosenPlace[$index]" g-places-autocomplete="" options="autocompleteOptions" force-selection="true" ng-change="getRoutePointsAndWaypoints()"
+          button.btn.btn-default ng-click="removeWayPoint($index)" ng-hide="$index == 0 || $index == chosenPlace.length-1" X
+        .col-md-2
+          uib-timepicker ng-model="times[$index]" show-meridian="false" ng-change="updateTime($index, {{times[$index]}})"
 
-div
-  input type="number" min="1" max="8" value="1" ng-model="spaces"
-div
-  button.btn.btn-default ng-click="addWayPoint()" Dodaj punkt pośredni
-div
-  button.btn.btn-default ng-click="saveJourney()" Zapisz przejazd
+    div
+      input type="number" min="1" max="8" value="1" ng-model="spaces"
+    div
+      button.btn.btn-default ng-click="addWayPoint()" Dodaj punkt pośredni
+    div
+      button.btn.btn-default ng-click="saveJourney()" Zapisz przejazd

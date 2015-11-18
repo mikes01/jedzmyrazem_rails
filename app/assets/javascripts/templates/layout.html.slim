@@ -1,0 +1,25 @@
+section id="container" class=""
+  header class="header dark-bg"
+
+    a.logo href="index.html" 
+      | Jedzmy
+      span.lite razem
+
+    div.top-nav.notification-row             
+      ul.nav.pull-right.top-menu
+        li.dropdown
+          a.dropdown-toggle data-toggle="dropdown" href="#"
+            span class="username"
+              | {{user.username}}
+            b.caret
+          ul.dropdown-menu.extended.logout
+            div.log-arrow-up
+            li.eborder-top
+              a href="#"
+                i.icon_profile
+                | Edytuj konto
+            li
+              a href="login.html"
+                i.icon_key_alt
+                | Wyloguj
+  div ui-view=""
