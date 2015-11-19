@@ -1,26 +1,67 @@
 section#main-content
   section.wrapper
-    div
-      map center="{{map.center}}" zoom="{{map.zoom}}" width="100%"
-    div.row
-      .col-md-2
-        p.input-group
-          input.form-control close-text="Close" datepicker-options="dateOptions" is-open="status.opened" min-date="minDate" ng-model="dt" ng-required="true" type="text" uib-datepicker-popup="{{format}}" ng-change="checkMinTime()"
-          span.input-group-btn
-            button.btn.btn-default ng-click="open($event)" type="button" 
-              i.glyphicon.glyphicon-calendar
+    .row
+      .col-md-4
+        .row
+          .col-md-6
+            p.input-group
+              input.form-control close-text="Close" datepicker-options="dateOptions" is-open="status.opened" min-date="minDate" ng-model="dt" ng-required="true" type="text" uib-datepicker-popup="{{format}}" ng-change="checkStartTime()"
+              span.input-group-btn
+                button.btn.btn-default ng-click="open($event)" type="button" 
+                  i.glyphicon.glyphicon-calendar
 
-    div ng-repeat="place in chosenPlace track by $index"
-      .row
-        .col-md-2
-          input ng-model="chosenPlace[$index]" g-places-autocomplete="" options="autocompleteOptions" force-selection="true" ng-change="getRoutePointsAndWaypoints()"
-          button.btn.btn-default ng-click="removeWayPoint($index)" ng-hide="$index == 0 || $index == chosenPlace.length-1" X
-        .col-md-2
-          uib-timepicker ng-model="times[$index]" show-meridian="false" ng-change="updateTime($index, {{times[$index]}})"
+        .row
+            form.inline-form
+              div.b Z:
+              div.form-group.col-md-6 
+                div.input-group
+                  input.form-control ng-model="start.place" g-places-autocomplete="" options="autocompleteOptions" force-selection="true" ng-change="getRoutePointsAndWaypoints()"
+              div.input-group.col-md-5
+                input.form-control bs-timepicker="" data-arrow-behavior="picker" data-length="1" data-minute-step="1" data-time-format="HH:mm" name="time" ng-model="start.time" size="8" type="text" data-bs-show="start.timeshow" trigger="manual" ng-change="checkStartTime()"
+                span.input-group-btn
+                  button.btn.btn-default type="button" ng-click="start.timeshow = !start.timeshow"
+                    i.glyphicon.glyphicon-time
 
-    div
-      input type="number" min="1" max="8" value="1" ng-model="spaces"
-    div
-      button.btn.btn-default ng-click="addWayPoint()" Dodaj punkt pośredni
-    div
-      button.btn.btn-default ng-click="saveJourney()" Zapisz przejazd
+        div ng-repeat="place in waypoints track by $index"
+          .row
+            form.inline-form
+              div.form-group.col-md-6 
+                div.input-group
+                  input.form-control ng-model="waypoints[$index].place" g-places-autocomplete="" options="autocompleteOptions" force-selection="true" ng-change="getRoutePointsAndWaypoints()"
+                  span.input-group-btn
+                    button.btn.btn-default type="button" ng-click="removeWayPoint($index)"
+                      i.glyphicon.glyphicon-remove
+              div.input-group.col-md-5
+                input.form-control bs-timepicker="" data-arrow-behavior="picker" data-length="1" data-minute-step="1" data-time-format="HH:mm" name="time" ng-model="waypoints[$index].time" size="8" type="text" data-bs-show="waypoints[$index].timeshow" trigger="manual" ng-change="checkWaypointTime($index, {{waypoints[$index].time}})"
+                span.input-group-btn
+                  button.btn.btn-default type="button" ng-click="waypoints[$index].timeshow = !waypoints[$index].timeshow"
+                    i.glyphicon.glyphicon-time
+
+        .row
+          .col-md-5
+          button.btn.btn-default ng-click="addWayPoint()"
+            i.glyphicon.glyphicon-plus
+
+        .row
+            form.inline-form
+              div Do:
+              div.form-group.col-md-6 
+                div.input-group
+                  input.form-control ng-model="finish.place" g-places-autocomplete="" options="autocompleteOptions" force-selection="true" ng-change="getRoutePointsAndWaypoints()"
+              div.input-group.col-md-5
+                input.form-control bs-timepicker="" data-arrow-behavior="picker" data-length="1" data-minute-step="1" data-time-format="HH:mm" name="time" ng-model="finish.time" size="8" type="text" data-bs-show="finish.timeshow" trigger="manual" ng-change="checkFinishTime({{finish.time}})"
+                span.input-group-btn
+                  button.btn.btn-default type="button" ng-click="finish.timeshow = !finish.timeshow"
+                    i.glyphicon.glyphicon-time
+          
+        .row
+          .col-md-4
+            label Ilość miejsc:
+            input.form-control type="number" min="1" max="8" ng-model="spaces"
+        .row
+          .col-md-4
+          .col-md-3
+            button.btn.btn-default ng-click="saveJourney()" Zapisz przejazd
+
+      .col-md-8
+        map center="{{map.center}}" zoom="{{map.zoom}}" width="100%"

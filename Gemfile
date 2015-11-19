@@ -64,4 +64,5 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-angular-i18n', '~> 1.4.7'
   gem 'rails-assets-moment', '~> 2.10.6'
   gem 'rails-assets-fontawesome'
+  gem 'rails-assets-angular-strap'
 end

@@ -6,7 +6,7 @@ class Journey < ActiveRecord::Base
   def self.create_with_path(journey_with_path, user)
     Journey.transaction do
       journey = Journey.create!(date: journey_with_path[:date],
-                                spaces: journey_with_path[:date],
+                                spaces: journey_with_path[:spaces],
                                 driver: user)
       Waypoint.create_from_array(journey_with_path[:path], journey)
       journey

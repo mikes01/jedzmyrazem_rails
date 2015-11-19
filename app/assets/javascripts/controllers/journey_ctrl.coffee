@@ -3,6 +3,7 @@ angular.module 'JedzmyrazemApp'
   ($http, $scope, $location, $rootScope, $filter, Auth, Journey)->
 
     Auth.currentUser().then((user) ->
+      $scope.user = user
       (error) ->
         $location.path('/sign_in')
       )
@@ -17,24 +18,20 @@ angular.module 'JedzmyrazemApp'
     $scope.autocompleteOptions =
       componentRestrictions: {country: 'pl'}
 
-    $scope.chosenPlace = [null, null]
-    $scope.times = [moment(new Date).add(10, 'm'),
-    moment(new Date).add(20, 'm')]
+    $scope.start = {time: moment(new Date).add(10, 'm'), place: null}
+    $scope.finish = {time: moment(new Date).add(20, 'm'), place: null}
+    $scope.waypoints = []
+    $scope.spaces = 1
 
     marker = null
 
     $scope.addWayPoint = () ->
-      lastPlace = $scope.chosenPlace[$scope.chosenPlace.length - 1]
-      lastTime = $scope.times[$scope.times.length - 1]
-      $scope.chosenPlace[$scope.chosenPlace.length - 1] = null
-      $scope.times[$scope.times.length - 1] = moment(lastTime)
-      $scope.chosenPlace.push lastPlace
-      $scope.times.push lastTime
+      lastWaypoint = {place: null, time: $scope.finish.time}
+      $scope.waypoints.push lastWaypoint
 
 
     $scope.removeWayPoint = (index) ->
-      $scope.chosenPlace.splice(index, 1)
-      $scope.times.splice(index, 1)
+      $scope.waypoints.splice(index, 1)
       $scope.getRoutePointsAndWaypoints()
 
 
@@ -49,22 +46,25 @@ angular.module 'JedzmyrazemApp'
       #Define a variable for waypoints.
       _waypoints = new Array
 
-      i = 1
-      while i < $scope.chosenPlace.length - 1
-        if $scope.chosenPlace[i] != null
+      i = 0
+      while i < $scope.waypoints.length
+        if $scope.waypoints[i].place != null
           _waypoints.push
-            location: $scope.chosenPlace[i].geometry.location
+            location: $scope.waypoints[i].place.geometry.location
             stopover: true
         i++
       try
         marker.setMap null
-        drawRoute $scope.chosenPlace[0].geometry.
-        location, $scope.chosenPlace[$scope.chosenPlace.length - 1].
-        geometry.location, _waypoints
+        drawRoute $scope.start.place.geometry.location,
+        $scope.finish.place.geometry.location, _waypoints
       catch
+        if $scope.start.place != null
+          location = $scope.start.place
+        else
+          location = $scope.finish.place
         marker = new google.maps.Marker({
           map: $scope.map,
-          position: $scope.chosenPlace[0].geometry.location,
+          position: location.geometry.location,
           draggable: false})
 
 
@@ -116,44 +116,89 @@ angular.module 'JedzmyrazemApp'
     $scope.format = 'dd.MM.yyyy'
     $scope.status = opened: false
 
-    $scope.checkMinTime = () ->
+    $scope.checkStartTime = () ->
       date = moment($scope.dt, $scope.format)
       today = moment(new Date, $scope.format)
       if date.isSame(today)
-        if moment($scope.times[0], 'H:mm:ss').valueOf() <
-        moment(new Date, 'H:mm:ss').valueOf()
-          $scope.times[0] = moment(new Date).add(10, 'm')
-          $scope.updateTime()
+        if moment($scope.start.time , 'H:mm:ss').valueOf() <
+        moment(new Date, 'H:mm:ss').add(10, 'm').valueOf()
+          $scope.start.time = moment(new Date).add(10, 'm')
+          if moment($scope.finish.time , 'H:mm:ss').valueOf() <
+          moment($scope.start.time , 'H:mm:ss').add(10, 'm').valueOf()
+            $scope.finish.time = moment(new Date).add(20, 'm')
 
-    $scope.updateTime = (index, oldValue) ->
-      if(index > 0)
-        if(moment($scope.times[index]).valueOf() <
-        moment($scope.times[index - 1]).valueOf())
-          $scope.times[index] =  moment(oldValue)
-          return
-      diff = moment($scope.times[index]).valueOf() - moment(oldValue).valueOf()
-      i = index + 1
-      while(i < $scope.times.length)
-        $scope.times[i] = moment($scope.times[i]).add(diff, 'ms')
-        i++
+    $scope.checkWaypointTime = (index, oldValue) ->
+      if index > 0
+        if moment($scope.waypoints[index].time , 'H:mm:ss').valueOf() <
+        moment($scope.waypoints[index-1].time , 'H:mm:ss').valueOf()
+          $scope.waypoints[index].time = oldValue
+      else
+        if moment($scope.waypoints[index].time , 'H:mm:ss').valueOf() <
+        moment($scope.start.time , 'H:mm:ss').valueOf()
+          $scope.waypoints[index].time = oldValue
+
+    $scope.checkFinishTime = (oldValue) ->
+      if $scope.waypoints.length > 0
+        if moment($scope.finish.time , 'H:mm:ss').valueOf() <
+        moment($scope.waypoints[$scope.waypoints.length -1].time , 'H:mm:ss').
+        valueOf()
+          $scope.finish.time = oldValue
+      else
+        if moment($scope.finish.time , 'H:mm:ss').valueOf() <
+        moment($scope.start.time , 'H:mm:ss').valueOf()
+          $scope.finish.time = oldValue
+
+
 
     setTimes = (points) ->
       i = 1
-      while(i < $scope.times.length)
-        $scope.times[i] = moment($scope.times[i-1])
-        .add(points[i-1].duration.value, 's')
+      
+      while(i < $scope.waypoints.length)
+        $scope.waypoints[i].time = moment($scope.waypoints[i-1].time)
+        .add(points[i].duration.value, 's')
         i++
+      if $scope.waypoints.length > 0
+        $scope.waypoints[0].time = moment($scope.start.time)
+        .add(points[0].duration.value, 's')
+        $scope.finish.time = moment($scope.waypoints[$scope.waypoints.
+        length-1].time)
+        .add(points[$scope.waypoints.length].duration.value, 's')
+      else
+        $scope.finish.time = moment($scope.start.time)
+          .add(points[0].duration.value, 's')
+
+
 
     $scope.saveJourney = () ->
-      i = 0
+      
+      
       journey = {path: [], date: moment($scope.dt).format("YYYY-MM-DD"),
       spaces: $scope.spaces}
-      while(i < $scope.chosenPlace.length)
-        journey.path.push {time: moment($scope.times[i]).format("HH:mm"),
+      journey.path.push {time: moment($scope.start.time).format("HH:mm"),
+      point: []}
+      journey.path[0].point.push $scope.start.place.geometry.location.lat()
+      journey.path[0].point.push $scope.start.place.geometry.location.lng()
+
+      
+      i = 0
+
+      while(i < $scope.waypoints.length)
+        journey.path.push
+        {time: moment($scope.waypoints[i].time).format("HH:mm"),
         point: []}
-        journey.path[i].point.push $scope.chosenPlace[i].geometry.location.lat()
-        journey.path[i].point.push $scope.chosenPlace[i].geometry.location.lng()
+        journey.path[i+1].point.push $scope.waypoints[i].
+        place.geometry.location.lat()
+        journey.path[i+1].point.push $scope.waypoints[i].
+        place.geometry.location.lng()
         i++
+
+      journey.path.push {time: moment($scope.finish.time).format("HH:mm"),
+      point: []}
+      journey.path[journey.path.length-1].point.push $scope.finish.place.
+      geometry.location.lat()
+      journey.path[journey.path.length-1].point.push $scope.finish.place.
+      geometry.location.lng()
+
       Journey.createJourney(journey).success (data) ->
         console.log data
       .error (data) ->
