@@ -2,6 +2,11 @@ angular.module 'JedzmyrazemApp'
   .controller 'JourneyCtrl',
   ($http, $scope, $location, $rootScope, $filter, Auth, Journey)->
 
+    Auth.currentUser().then((user) ->
+      (error) ->
+        $location.path('/sign_in')
+      )
+
     directionsService = new google.maps.DirectionsService()
     _directionsRenderer = ""
 

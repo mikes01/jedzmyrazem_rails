@@ -15,11 +15,11 @@ section id="container" class=""
           ul.dropdown-menu.extended.logout
             div.log-arrow-up
             li.eborder-top
-              a href="#"
+              a href="#/edit_user"
                 i.icon_profile
                 | Edytuj konto
-            li
-              a href="login.html"
+            li ng-click="signOut()"
+              a href=""
                 i.icon_key_alt
                 | Wyloguj
   div ui-view=""

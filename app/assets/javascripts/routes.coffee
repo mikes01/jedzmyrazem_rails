@@ -5,27 +5,28 @@ angular.module 'JedzmyrazemApp'
     $stateProvider
       .state('index', {
         abstract: true,
+        controller: 'NavbarCtrl'
         templateUrl: 'layout.html',
       })
       .state('home', {
         parent: 'index',
         url: '/home',
-        controller: 'SearchJourneyCtrl',
+        controller: 'HomeCtrl',
         templateUrl: 'home.html'
       })
       .state('sign_in', {
         url: '/sign_in',
-        controller: 'UnloggedUserCtrl',
+        controller: 'UserCtrl',
         templateUrl: 'sign_in.html'
       })
       .state('sign_up', {
         url: '/sign_up',
-        controller: 'UnloggedUserCtrl',
+        controller: 'UserCtrl',
         templateUrl: 'sign_up.html'
       })
       .state('reset_password', {
         url: '/reset_password',
-        controller: 'UnloggedUserCtrl',
+        controller: 'UserCtrl',
         templateUrl: 'reset_password.html'
       })
       .state('edit_user', {
@@ -35,7 +36,7 @@ angular.module 'JedzmyrazemApp'
       })
       .state('edit_password', {
         url: '/edit_password/:resetPasswordToken',
-        controller: 'UnloggedUserCtrl',
+        controller: 'UserCtrl',
         templateUrl: 'edit_password.html'
       })
       .state('create_journey', {

@@ -1,23 +1,42 @@
 angular.module 'JedzmyrazemApp'
-  .controller 'HomeCtrl', ($http, $scope, $location, Auth, User)->
-    $scope.hello = "hello"
-    Auth.currentUser().then((user) ->
-      $scope.user = user
-      console.log user
-    (error) ->
-      $location.path('/sign_in')
-    )
+  .controller 'HomeCtrl', ($http, $scope, $location, Auth, User, Journey)->
 
-    $scope.signOut = () ->
-      Auth.logout().then((user) ->
-        $location.path('/sign_in')
-      (error) ->
-        console.log('error')
-      )
+    $scope.today = ->
+      $scope.dt = new Date
+      
 
-    $scope.editUser = () ->
-      User.editUser($scope.user).success (data) ->
+    $scope.today()
+
+    $scope.clear = ->
+      $scope.dt = null
+
+
+    $scope.toggleMin = ->
+      $scope.minDate = if $scope.minDate then null else new Date
+
+    $scope.toggleMin()
+
+    $scope.open = ($event) ->
+      $scope.status.opened = true
+
+    $scope.setDate = (year, month, day) ->
+      $scope.dt = new Date(year, month, day)
+
+    $scope.dateOptions =
+      formatYear: 'yy'
+      startingDay: 1
+    $scope.format = 'dd.MM.yyyy'
+    $scope.status = opened: false
+
+    $scope.search = () ->
+      params = {date: moment($scope.dt).format("YYYY-MM-DD"),
+      start_time: moment($scope.startTime).format("HH:mm"),
+      start_lat: $scope.startPlace.geometry.location.lat()
+      start_lng: $scope.startPlace.geometry.location.lng(),
+      finish_lat: $scope.finishPlace.geometry.location.lat(),
+      finish_lng: $scope.finishPlace.geometry.location.lng()}
+
+      Journey.searchJourney(params).success (data) ->
         console.log data
-        $location.path('/home')
       .error (data) ->
-        console.log data.errors
+        console.log data

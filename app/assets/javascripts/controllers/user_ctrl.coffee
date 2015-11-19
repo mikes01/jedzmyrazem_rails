@@ -1,5 +1,5 @@
 angular.module('JedzmyrazemApp')
-  .controller 'UnloggedUserCtrl',
+  .controller 'UserCtrl',
   ($scope, $http, $location, $stateParams, Auth, User) ->
 
     Auth.currentUser().then (user) ->
