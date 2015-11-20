@@ -1,17 +1,46 @@
 section#main-content
   section.wrapper
-    div
-      .row
-        .col-md-2
-          input ng-model="startPlace" g-places-autocomplete="" options="autocompleteOptions" force-selection="true"
-          input ng-model="finishPlace" g-places-autocomplete="" options="autocompleteOptions" force-selection="true"
-        .col-md-2
-          uib-timepicker ng-model="startTime" show-meridian="false"
-        .col-md-2
-          p.input-group
-            input.form-control close-text="Close" datepicker-options="dateOptions" is-open="status.opened" ng-model="dt" ng-required="true" type="text" uib-datepicker-popup="{{format}}"
+    .form.form-inline role="form" 
+      form-group
+        input#fromField.form-control ng-model="startPlace" g-places-autocomplete="" options="autocompleteOptions" force-selection="true" placeholder="Z"
+      .form-group
+        input.sm-input.form-control#toField ng-model="finishPlace" g-places-autocomplete="" options="autocompleteOptions" force-selection="true" placeholder="Do"
+      .form-group
+        .input-group
+          input.form-control bs-timepicker="" data-arrow-behavior="picker" data-length="1" data-minute-step="1" data-time-format="HH:mm" name="time" ng-model="time" size="8" type="text" data-bs-show="timeshow" trigger="manual"
             span.input-group-btn
-              button.btn.btn-default ng-click="open($event)" type="button" 
-                i.glyphicon.glyphicon-calendar
-          button.btn.btn-default ng-click="search()" Szukaj
+              button.btn.btn-default type="button" ng-click="timeshow = !timeshow"
+                i.glyphicon.glyphicon-time
+      .form-group
+        .input-group
+          input.form-control close-text="Close" datepicker-options="dateOptions" is-open="status.opened" ng-model="dt" ng-required="true" type="text" uib-datepicker-popup="{{format}}"
+          span.input-group-btn
+            button.btn.btn-default ng-click="open($event)" type="button" 
+              i.glyphicon.glyphicon-calendar
+      button.btn.btn-default ng-click="search()" Szukaj
 
+    table.table.table-hover
+      thead
+        tr
+          th #
+          th Data
+          th Wolne miejsca
+          th Początek
+          th Koniec
+          th Kierowca
+      tbody
+        tr ng-repeat="journey in journeys"
+          th 
+            | {{$index}}
+          th 
+            | {{journey.date}}
+          th
+            | {{journey.spaces}}
+          th
+            reverse-geocode lat="{{journey.waypoints[0].point.lat}}" lng="{{journey.waypoints[0].point.lng}}"
+            | {{journey.waypoints[0].time | date: 'HH:mm'}}
+          th
+            reverse-geocode lat="{{journey.waypoints[journey.waypoints.length - 1].point.lat}}" lng="{{journey.waypoints[journey.waypoints.length - 1].point.lng}}"
+            | {{journey.waypoints[journey.waypoints.length - 1].time | date: 'HH:mm'}}
+          th 
+            | {{journey.user}}

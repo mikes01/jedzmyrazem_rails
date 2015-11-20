@@ -10,13 +10,9 @@ class JourneysController < ApplicationController
 
   def search
     parameters = search_params
-    @journeys = Journey.includes(:waypoints).where(date: parameters[:date])
-                .where('ST_Distance(waypoints.point, '\
-        "'POINT(#{parameters[:start_lat]} "\
-          "#{parameters[:start_lng]})') < 500")
-                .where('waypoints.time > ?', parameters[:start_time])
-                .references(:waypoints)
-    render json: { status: :ok, journey: @journeys }
+    result = Journey.get_formated_journays(parameters)
+
+    render json: { status: :ok, journey: result }
   rescue StandardError => e
     render json: { status: :unprocessable_entity, error: e.to_s }
   end

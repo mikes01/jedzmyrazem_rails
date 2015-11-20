@@ -45,6 +45,6 @@ angular.module('JedzmyrazemApp')
     $scope.editPassword = () ->
       User.editPassword($scope.user, $stateParams.resetPasswordToken)
       .success (data) ->
-        console.log "sukces!"
+        $location.path('/home')
       .error (data) ->
         console.log data

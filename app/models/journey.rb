@@ -12,4 +12,29 @@ class Journey < ActiveRecord::Base
       journey
     end
   end
+
+  def format
+    result = as_json
+    result['waypoints'] = []
+    waypoints.each do |waypoint|
+      result['waypoints'].push("point":
+        { "lat": waypoint.point.x, "lng": waypoint.point.y },
+                               "time": waypoint.time)
+    end
+    result['user'] = driver.username
+    result
+  end
+
+  def self.get_formated_journays(parameters)
+    result = []
+    Journey.includes(:waypoints).where(date: parameters[:date])
+      .where('ST_Distance(waypoints.point, '\
+        "'POINT(#{parameters[:start_lat]} "\
+          "#{parameters[:start_lng]})') < 5000")
+      .where('waypoints.time > ?', parameters[:start_time])
+      .references(:waypoints).each do |j|
+        result.push j.format
+      end
+    result
+  end
 end

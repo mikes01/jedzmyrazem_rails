@@ -1,6 +1,9 @@
 angular.module 'JedzmyrazemApp'
   .controller 'HomeCtrl', ($http, $scope, $location, Auth, User, Journey)->
 
+    $scope.time = moment(new Date)
+    $scope.timeshow = false
+
     $scope.today = ->
       $scope.dt = new Date
       
@@ -30,13 +33,14 @@ angular.module 'JedzmyrazemApp'
 
     $scope.search = () ->
       params = {date: moment($scope.dt).format("YYYY-MM-DD"),
-      start_time: moment($scope.startTime).format("HH:mm"),
+      start_time: moment($scope.time).format("HH:mm"),
       start_lat: $scope.startPlace.geometry.location.lat()
       start_lng: $scope.startPlace.geometry.location.lng(),
       finish_lat: $scope.finishPlace.geometry.location.lat(),
       finish_lng: $scope.finishPlace.geometry.location.lng()}
 
       Journey.searchJourney(params).success (data) ->
+        $scope.journeys = data.journey
         console.log data
       .error (data) ->
         console.log data

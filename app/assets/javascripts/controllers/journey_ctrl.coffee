@@ -4,9 +4,9 @@ angular.module 'JedzmyrazemApp'
 
     Auth.currentUser().then((user) ->
       $scope.user = user
-      (error) ->
-        $location.path('/sign_in')
-      )
+    (error) ->
+      $location.path('/sign_in')
+    )
 
     directionsService = new google.maps.DirectionsService()
     _directionsRenderer = ""
@@ -17,6 +17,7 @@ angular.module 'JedzmyrazemApp'
 
     $scope.autocompleteOptions =
       componentRestrictions: {country: 'pl'}
+      #bounds: {east: 51.042022, south: 17.178622, west: 51.211381, north: 16.810580}
 
     $scope.start = {time: moment(new Date).add(10, 'm'), place: null}
     $scope.finish = {time: moment(new Date).add(20, 'm'), place: null}
@@ -183,9 +184,10 @@ angular.module 'JedzmyrazemApp'
       i = 0
 
       while(i < $scope.waypoints.length)
-        journey.path.push
-        {time: moment($scope.waypoints[i].time).format("HH:mm"),
-        point: []}
+        journey.path.push {time: moment($scope.waypoints[i].time)
+        .format("HH:mm"), point: []}
+        console.log i
+        console.log journey.path
         journey.path[i+1].point.push $scope.waypoints[i].
         place.geometry.location.lat()
         journey.path[i+1].point.push $scope.waypoints[i].
