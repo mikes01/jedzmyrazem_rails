@@ -17,7 +17,6 @@ angular.module 'JedzmyrazemApp'
 
     $scope.autocompleteOptions =
       componentRestrictions: {country: 'pl'}
-      #bounds: {east: 51.042022, south: 17.178622, west: 51.211381, north: 16.810580}
 
     $scope.start = {time: moment(new Date).add(10, 'm'), place: null}
     $scope.finish = {time: moment(new Date).add(20, 'm'), place: null}
