@@ -113,6 +113,16 @@ FactoryGirl.define do
         end
       end
 
+      factory :journey_42_63_84_73 do
+        spaces 7
+        after(:create) do |journey|
+          FactoryGirl.create(:waypoint_42, time: '13:15', journey: journey)
+          FactoryGirl.create(:waypoint_63, time: '13:25', journey: journey)
+          FactoryGirl.create(:waypoint_84, time: '13:35', journey: journey)
+          FactoryGirl.create(:waypoint_73, time: '13:55', journey: journey)
+        end
+      end
+
       factory :journey_85_12_35_day_before do
         spaces 7
         date '2015-12-31'

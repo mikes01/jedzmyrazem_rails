@@ -93,4 +93,41 @@ RSpec.describe Journey, type: :model do
       expect(sorted_journeys[:rest].count).to eq(2)
     end
   end
+
+  describe 'find_intersection_point' do
+    context 'if intersection point exists' do
+      it('returns two not nil') do
+        first = FactoryGirl.create(:journey_35_12_85)
+        second = FactoryGirl.create(:journey_15_64)
+        p1, p2 = first.find_intersection_point(second)
+        expect(p1).to_not be_nil
+        expect(p2).to_not be_nil
+      end
+      it('returns intersection points') do
+        first = FactoryGirl.create(:journey_35_12_85)
+        second = FactoryGirl.create(:journey_15_64)
+        p1, p2 = first.find_intersection_point(second)
+        expect(p1.point).to eq(FactoryGirl.build(:waypoint_12).point)
+        expect(p2.point).to eq(FactoryGirl.build(:waypoint_15).point)
+      end
+    end
+    context 'if second time is before first' do
+      it('returns two nil') do
+        first = FactoryGirl.create(:journey_15_64)
+        second = FactoryGirl.create(:journey_35_12_85)
+        p1, p2 = first.find_intersection_point(second)
+        expect(p1).to be_nil
+        expect(p2).to be_nil
+      end
+    end
+    context 'if intersection point is last of second journey' do
+      it('returns two nil') do
+        first = FactoryGirl.create(:journey_42_63_84_73)
+        second = FactoryGirl.create(:journey_35_12_85)
+        p1, p2 = first.find_intersection_point(second)
+        expect(p1).to be_nil
+        expect(p2).to be_nil
+      end
+    end
+  end
 end

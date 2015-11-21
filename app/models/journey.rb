@@ -74,7 +74,6 @@ class Journey < ActiveRecord::Base
     journeys.each_with_index do |journey|
       start, finish = journey.find_start_and_finish(parameters)
       sorted_js[journey.choose_category(start, finish)].push journey
-      # byebug
     end
     sorted_js
   end
@@ -89,5 +88,17 @@ class Journey < ActiveRecord::Base
     else
       return :rest
     end
+  end
+
+  def find_intersection_point(journay)
+    journay.waypoints[0..-2].each do |point|
+      waypoints.each do |self_point|
+        if point.point.distance(self_point.point) < 800 &&
+           point.time > self_point.time
+          return self_point, point
+        end
+      end
+    end
+    [nil, nil]
   end
 end
