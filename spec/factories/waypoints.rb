@@ -22,7 +22,7 @@ FactoryGirl.define do
     factory :waypoint_22 do
       point 'POINT(51.112053 17.057486)'
     end
-    factory :waypoint_2_3 do
+    factory :waypoint_23 do
       point 'POINT(51.110370 17.062604)'
     end
     factory :waypoint_24 do

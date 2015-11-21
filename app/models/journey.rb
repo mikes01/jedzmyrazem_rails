@@ -48,18 +48,15 @@ class Journey < ActiveRecord::Base
   def self.search_journeys(parameters)
     candidates = Journey.get_journeys_in_period(parameters[:start_time],
                                                 parameters[:date])
-    results = []
-    candidates.each_with_index do |candidate, _i|
-      start, finish = candidate.find_start_and_finish(parameters)
-      results.push candidate if Journey.directly?(start, finish)
-    end
-    results
+    sorted_js = Journey.sort_journeys(candidates, parameters)
+
+    sorted_js[:direct]
   end
 
   def find_point(lat, lng)
     waypoints.find_by('ST_Distance(point, '\
         "'POINT(#{lat} "\
-          "#{lng})') < 700")
+          "#{lng})') < 800")
   end
 
   def find_start_and_finish(parameters)
@@ -70,5 +67,27 @@ class Journey < ActiveRecord::Base
 
   def self.directly?(start, finish)
     !start.nil? && !finish.nil? && start.id < finish.id
+  end
+
+  def self.sort_journeys(journeys, parameters)
+    sorted_js = { direct: [], with_start: [], with_finish: [], rest: [] }
+    journeys.each_with_index do |journey|
+      start, finish = journey.find_start_and_finish(parameters)
+      sorted_js[journey.choose_category(start, finish)].push journey
+      # byebug
+    end
+    sorted_js
+  end
+
+  def choose_category(start, finish)
+    if !start.nil? && !finish.nil? && start.id < finish.id
+      return :direct
+    elsif !start.nil?
+      return :with_start
+    elsif !finish.nil?
+      return :with_finish
+    else
+      return :rest
+    end
   end
 end
