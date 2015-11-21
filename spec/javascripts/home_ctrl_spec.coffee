@@ -7,6 +7,6 @@ describe 'HomeCtrl', ( $scope)->
     $scope = $injector.get('$rootScope').$new()
     $controller = $injector.get('$controller')
 
-  it 'has hello var in scope', ->
+  it 'has timeshow var in scope', ->
     $controller('HomeCtrl', {$scope: $scope })
-    expect($scope.hello).toEqual 'hello'
+    expect($scope.timeshow).toEqual false
