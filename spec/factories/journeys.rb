@@ -16,12 +16,11 @@ FactoryGirl.define do
     factory :journeys do
       date '2016-01-01'
       driver_id 1
-      factory :journey_11_21_31_41_51_61_71_81 do
+      factory :journey_11_21_41_51_61_71_81 do
         spaces 4
         after(:create) do |journey|
           FactoryGirl.create(:waypoint_11, time: '12:00', journey: journey)
           FactoryGirl.create(:waypoint_21, time: '12:15', journey: journey)
-          FactoryGirl.create(:waypoint_31, time: '12:30', journey: journey)
           FactoryGirl.create(:waypoint_41, time: '12:45', journey: journey)
           FactoryGirl.create(:waypoint_51, time: '13:00', journey: journey)
           FactoryGirl.create(:waypoint_61, time: '13:15', journey: journey)

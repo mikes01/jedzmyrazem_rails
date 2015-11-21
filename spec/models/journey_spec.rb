@@ -2,21 +2,21 @@ require 'rails_helper'
 
 RSpec.describe Journey, type: :model do
   before(:each) do
-    FactoryGirl.create(:user)
-    FactoryGirl.create(:journey_11_21_31_41_51_61_71_81)
-    FactoryGirl.create(:journey_82_72_62_52_42_32_22_12)
-    FactoryGirl.create(:journey_23_73_83)
-    FactoryGirl.create(:journey_82_73_23)
-    FactoryGirl.create(:journey_24_74_84_14)
-    FactoryGirl.create(:journey_15_64)
-    FactoryGirl.create(:journey_15_64_nospace)
-    FactoryGirl.create(:journey_15_64_before)
-    FactoryGirl.create(:journey_15_64_late)
-    FactoryGirl.create(:journey_35_12_85)
-    FactoryGirl.create(:journey_85_12_35_day_before)
-    FactoryGirl.create(:journey_85_12_35_day_after)
-    FactoryGirl.create(:journey_35_22_73)
-    FactoryGirl.create(:journey_65_32_44_53)
+    user = FactoryGirl.create(:user)
+    FactoryGirl.create(:journey_11_21_41_51_61_71_81, driver: user)
+    FactoryGirl.create(:journey_82_72_62_52_42_32_22_12, driver: user)
+    FactoryGirl.create(:journey_23_73_83, driver: user)
+    FactoryGirl.create(:journey_82_73_23, driver: user)
+    FactoryGirl.create(:journey_24_74_84_14, driver: user)
+    FactoryGirl.create(:journey_15_64, driver: user)
+    FactoryGirl.create(:journey_15_64_nospace, driver: user)
+    FactoryGirl.create(:journey_15_64_before, driver: user)
+    FactoryGirl.create(:journey_15_64_late, driver: user)
+    FactoryGirl.create(:journey_35_12_85, driver: user)
+    FactoryGirl.create(:journey_85_12_35_day_before, driver: user)
+    FactoryGirl.create(:journey_85_12_35_day_after, driver: user)
+    FactoryGirl.create(:journey_35_22_73, driver: user)
+    FactoryGirl.create(:journey_65_32_44_53, driver: user)
   end
   describe 'get_journeys_in_period' do
     let(:user) { FactoryGirl.create(:user) }
@@ -43,15 +43,50 @@ RSpec.describe Journey, type: :model do
         journeys = Journey.search_journeys(@parameters)
         expect(journeys.count).to eq(2)
       end
+      it 'return journeys made with one pass' do
+        journeys = Journey.search_journeys @parameters
+        journeys.each do |j|
+          expect(j[:passes].count). to eq(1)
+        end
+      end
+      it 'return journeys without intersections' do
+        journeys = Journey.search_journeys @parameters
+        journeys.each do |j|
+          expect(j[:intersections].count). to eq(0)
+        end
+      end
     end
 
-    # context 'with journeys made up of two intermediate passes' do
-    #   it 'return journeys' do
-    #     journeys = Journey.search_journeys
-    #     expect(journeys.count).to eq(2)
-    #     pending "Not implemented yet"
-    #   end
-    # end
+    context 'with journeys made up of two intermediate passes' do
+      before(:each) do
+        start_point = FactoryGirl.build(:waypoint_35)
+        finish_point = FactoryGirl.build(:waypoint_64)
+
+        @parameters = { date: '2016-01-01',
+                        start_lat: start_point.point.x,
+                        start_lng: start_point.point.y,
+                        finish_lat: finish_point.point.x,
+                        finish_lng: finish_point.point.y,
+                        start_time: '11:50'
+        }
+      end
+      it 'return journeys' do
+        journeys = Journey.search_journeys @parameters
+        expect(journeys.count).to eq(1)
+      end
+      it 'return journeys made with two passes' do
+        journeys = Journey.search_journeys @parameters
+        journeys.each do |j|
+          expect(j[:passes].count). to eq(2)
+        end
+      end
+      it 'return journeys with two intersections' do
+        journeys = Journey.search_journeys @parameters
+        journeys.each do |j|
+          expect(j[:intersections].count). to eq(2)
+        end
+      end
+    end
 
     # context 'with journeys made up of three or four intermediate passes' do
     #   it 'return journeys' do

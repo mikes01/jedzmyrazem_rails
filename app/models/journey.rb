@@ -38,25 +38,18 @@ class Journey < ActiveRecord::Base
     result
   end
 
+  def self.search_journeys(parameters)
+    candidates = Journey.get_journeys_in_period(parameters[:start_time],
+                                                parameters[:date])
+    sorted_js = Journey.sort_journeys(candidates, parameters)
+    Journey.get_matched_journeys_from_sorted_journeys(sorted_js)
+  end
+
   def self.get_journeys_in_period(start_time, date)
     Journey.includes(:waypoints).where(date: date)
       .where('waypoints.time BETWEEN ? AND ?', start_time,
              (Time.zone.parse(start_time) + 2.hour).to_formatted_s(:db))
       .references(:waypoints)
-  end
-
-  def self.search_journeys(parameters)
-    candidates = Journey.get_journeys_in_period(parameters[:start_time],
-                                                parameters[:date])
-    sorted_js = Journey.sort_journeys(candidates, parameters)
-
-    sorted_js[:direct]
-  end
-
-  def find_point(lat, lng)
-    waypoints.find_by('ST_Distance(point, '\
-        "'POINT(#{lat} "\
-          "#{lng})') < 800")
   end
 
   def find_start_and_finish(parameters)
@@ -65,8 +58,10 @@ class Journey < ActiveRecord::Base
     [start, finish]
   end
 
-  def self.directly?(start, finish)
-    !start.nil? && !finish.nil? && start.id < finish.id
+  def find_point(lat, lng)
+    waypoints.find_by('ST_Distance(point, '\
+        "'POINT(#{lat} "\
+          "#{lng})') < 800")
   end
 
   def self.sort_journeys(journeys, parameters)
@@ -88,6 +83,29 @@ class Journey < ActiveRecord::Base
     else
       return :rest
     end
+  end
+
+  def self.get_matched_journeys_from_sorted_journeys(sorted_js)
+    results = []
+    sorted_js[:direct].each do |j|
+      results.push passes: [j.format], intersections: []
+    end
+    sorted_js[:with_start].each do |j|
+      matched_js = j.match_with_journays_from_array(sorted_js[:with_finish])
+      results.concat matched_js
+    end
+    results
+  end
+
+  def match_with_journays_from_array(journeys)
+    results = []
+    journeys.each do |j|
+      p1, p2 = find_intersection_point(j)
+      if !p1.nil? && !p2.nil?
+        results.push passes: [format, j.format], intersections: [p1, p2]
+      end
+    end
+    results
   end
 
   def find_intersection_point(journay)

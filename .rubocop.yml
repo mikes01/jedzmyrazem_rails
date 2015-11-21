@@ -3,3 +3,5 @@ AllCops:
     - 'config/**/*'
     - 'db/**/*'
     - 'bin/**/*'
+Metrics/ClassLength:
+  Max: 200
