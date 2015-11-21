@@ -37,4 +37,38 @@ class Journey < ActiveRecord::Base
       end
     result
   end
+
+  def self.get_journeys_in_period(start_time, date)
+    Journey.includes(:waypoints).where(date: date)
+      .where('waypoints.time BETWEEN ? AND ?', start_time,
+             (Time.zone.parse(start_time) + 2.hour).to_formatted_s(:db))
+      .references(:waypoints)
+  end
+
+  def self.search_journeys(parameters)
+    candidates = Journey.get_journeys_in_period(parameters[:start_time],
+                                                parameters[:date])
+    results = []
+    candidates.each_with_index do |candidate, _i|
+      start, finish = candidate.find_start_and_finish(parameters)
+      results.push candidate if Journey.directly?(start, finish)
+    end
+    results
+  end
+
+  def find_point(lat, lng)
+    waypoints.find_by('ST_Distance(point, '\
+        "'POINT(#{lat} "\
+          "#{lng})') < 700")
+  end
+
+  def find_start_and_finish(parameters)
+    start = find_point(parameters[:start_lat], parameters[:start_lng])
+    finish = find_point(parameters[:finish_lat], parameters[:finish_lng])
+    [start, finish]
+  end
+
+  def self.directly?(start, finish)
+    !start.nil? && !finish.nil? && start.id < finish.id
+  end
 end
