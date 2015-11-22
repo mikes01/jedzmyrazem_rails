@@ -17,19 +17,19 @@ FactoryGirl.define do
     end
 
     factory :waypoint_21 do
-      point 'POINT(51.111555 17.060211)'
+      point 'POINT(51.161382 17.127025)'
     end
     factory :waypoint_22 do
-      point 'POINT(51.112053 17.057486)'
+      point 'POINT(51.159166 17.125413)'
     end
     factory :waypoint_23 do
-      point 'POINT(51.110370 17.062604)'
+      point 'POINT(51.160149 17.121879)'
     end
     factory :waypoint_24 do
-      point 'POINT(51.112532 17.064159)'
+      point 'POINT(51.158736 17.128615)'
     end
     factory :waypoint_25 do
-      point 'POINT(51.110572 17.057143)'
+      point 'POINT(51.160800 17.126583)'
     end
 
     factory :waypoint_31 do
@@ -49,19 +49,19 @@ FactoryGirl.define do
     end
 
     factory :waypoint_41 do
-      point 'POINT(51.150957 17.029118)'
+      point 'POINT(51.084590 17.035408)'
     end
     factory :waypoint_42 do
-      point 'POINT(51.150481 17.034580)'
+      point 'POINT(51.084590 17.044701)'
     end
     factory :waypoint_43 do
-      point 'POINT(51.151033 17.026721)'
+      point 'POINT(51.083389 17.040659)'
     end
     factory :waypoint_44 do
-      point 'POINT(51.147245 17.030332)'
+      point 'POINT(51.083910 17.037231)'
     end
     factory :waypoint_45 do
-      point 'POINT(51.156306 17.029148)'
+      point 'POINT(51.085270 17.036581)'
     end
 
     factory :waypoint_51 do

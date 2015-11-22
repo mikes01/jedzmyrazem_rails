@@ -17,7 +17,7 @@ FactoryGirl.define do
       date '2016-01-01'
       driver_id 1
       factory :journey_11_21_41_51_61_71_81 do
-        spaces 4
+        spaces 0
         after(:create) do |journey|
           FactoryGirl.create(:waypoint_11, time: '12:00', journey: journey)
           FactoryGirl.create(:waypoint_21, time: '12:15', journey: journey)
@@ -30,7 +30,7 @@ FactoryGirl.define do
       end
 
       factory :journey_82_72_62_52_42_32_22_12 do
-        spaces 4
+        spaces 1
         after(:create) do |journey|
           FactoryGirl.create(:waypoint_82, time: '12:00', journey: journey)
           FactoryGirl.create(:waypoint_72, time: '12:15', journey: journey)
@@ -39,7 +39,6 @@ FactoryGirl.define do
           FactoryGirl.create(:waypoint_42, time: '13:00', journey: journey)
           FactoryGirl.create(:waypoint_32, time: '13:15', journey: journey)
           FactoryGirl.create(:waypoint_22, time: '13:30', journey: journey)
-          FactoryGirl.create(:waypoint_12, time: '13:45', journey: journey)
         end
       end
 
@@ -53,7 +52,7 @@ FactoryGirl.define do
       end
 
       factory :journey_82_73_23 do
-        spaces 2
+        spaces 3
         after(:create) do |journey|
           FactoryGirl.create(:waypoint_82, time: '12:00', journey: journey)
           FactoryGirl.create(:waypoint_73, time: '12:20', journey: journey)
@@ -62,7 +61,7 @@ FactoryGirl.define do
       end
 
       factory :journey_24_74_84_14 do
-        spaces 3
+        spaces 4
         after(:create) do |journey|
           FactoryGirl.create(:waypoint_24, time: '12:40', journey: journey)
           FactoryGirl.create(:waypoint_74, time: '13:40', journey: journey)
@@ -72,23 +71,15 @@ FactoryGirl.define do
       end
 
       factory :journey_15_64 do
-        spaces 3
+        spaces 5
         after(:create) do |journey|
           FactoryGirl.create(:waypoint_15, time: '14:05', journey: journey)
           FactoryGirl.create(:waypoint_64, time: '14:15', journey: journey)
         end
       end
 
-      factory :journey_15_64_nospace do
-        spaces 0
-        after(:create) do |journey|
-          FactoryGirl.create(:waypoint_15, time: '14:06', journey: journey)
-          FactoryGirl.create(:waypoint_64, time: '14:16', journey: journey)
-        end
-      end
-
       factory :journey_15_64_before do
-        spaces 3
+        spaces 7
         after(:create) do |journey|
           FactoryGirl.create(:waypoint_15, time: '13:05', journey: journey)
           FactoryGirl.create(:waypoint_64, time: '13:15', journey: journey)
@@ -96,24 +87,24 @@ FactoryGirl.define do
       end
 
       factory :journey_15_64_late do
-        spaces 3
+        spaces 8
         after(:create) do |journey|
-          FactoryGirl.create(:waypoint_15, time: '14:25', journey: journey)
-          FactoryGirl.create(:waypoint_64, time: '14:45', journey: journey)
+          FactoryGirl.create(:waypoint_15, time: '15:25', journey: journey)
+          FactoryGirl.create(:waypoint_64, time: '15:45', journey: journey)
         end
       end
 
       factory :journey_35_12_85 do
-        spaces 7
+        spaces 9
         after(:create) do |journey|
-          FactoryGirl.create(:waypoint_35, time: '13:25', journey: journey)
+          FactoryGirl.create(:waypoint_35, time: '13:35', journey: journey)
           FactoryGirl.create(:waypoint_12, time: '13:45', journey: journey)
           FactoryGirl.create(:waypoint_85, time: '13:55', journey: journey)
         end
       end
 
       factory :journey_42_63_84_73 do
-        spaces 7
+        spaces 10
         after(:create) do |journey|
           FactoryGirl.create(:waypoint_42, time: '13:15', journey: journey)
           FactoryGirl.create(:waypoint_63, time: '13:25', journey: journey)
@@ -123,7 +114,7 @@ FactoryGirl.define do
       end
 
       factory :journey_85_12_35_day_before do
-        spaces 7
+        spaces 11
         date '2015-12-31'
         after(:create) do |journey|
           FactoryGirl.create(:waypoint_85, time: '13:25', journey: journey)
@@ -134,7 +125,7 @@ FactoryGirl.define do
 
       factory :journey_85_12_35_day_after do
         date '2016-01-02'
-        spaces 7
+        spaces 12
         after(:create) do |journey|
           FactoryGirl.create(:waypoint_85, time: '13:25', journey: journey)
           FactoryGirl.create(:waypoint_12, time: '13:45', journey: journey)
@@ -143,18 +134,17 @@ FactoryGirl.define do
       end
 
       factory :journey_35_22_73 do
-        spaces 7
+        spaces 13
         after(:create) do |journey|
           FactoryGirl.create(:waypoint_35, time: '13:25', journey: journey)
           FactoryGirl.create(:waypoint_22, time: '13:45', journey: journey)
           FactoryGirl.create(:waypoint_73, time: '13:55', journey: journey)
         end
       end
-      factory :journey_65_32_44_53 do
-        spaces 4
+      factory :journey_65_44_53 do
+        spaces 14
         after(:create) do |journey|
           FactoryGirl.create(:waypoint_65, time: '14:25', journey: journey)
-          FactoryGirl.create(:waypoint_32, time: '14:45', journey: journey)
           FactoryGirl.create(:waypoint_44, time: '14:55', journey: journey)
           FactoryGirl.create(:waypoint_53, time: '15:15', journey: journey)
         end
