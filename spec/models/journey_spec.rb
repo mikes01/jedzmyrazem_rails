@@ -16,6 +16,7 @@ RSpec.describe Journey, type: :model do
     FactoryGirl.create(:journey_85_12_35_day_after, driver: user)
     FactoryGirl.create(:journey_35_22_73, driver: user)
     FactoryGirl.create(:journey_65_44_53, driver: user)
+    FactoryGirl.create(:journey_55_73, driver: user)
   end
   describe 'get_journeys_in_period' do
     let(:user) { FactoryGirl.create(:user) }
@@ -144,7 +145,7 @@ RSpec.describe Journey, type: :model do
     end
     it('find all journeys without finish_point and start_point') do
       sorted_journeys = Journey.sort_journeys(@journeys, @parameters)
-      expect(sorted_journeys[:rest].count).to eq(2)
+      expect(sorted_journeys[:rest].count).to eq(3)
     end
   end
 
@@ -187,6 +188,8 @@ RSpec.describe Journey, type: :model do
 
   describe 'find_complex_journeys' do
     before(:each) do
+    end
+    it 'returns complex journeys made with 3 passes' do
       @journeys = Journey.all.includes(:waypoints)
       start_point = FactoryGirl.build(:waypoint_35)
       finish_point = FactoryGirl.build(:waypoint_54)
@@ -199,10 +202,25 @@ RSpec.describe Journey, type: :model do
                       start_time: '12:30'
       }
       @journeys = Journey.sort_journeys(@journeys, @parameters)
-    end
-    it 'returns complex journeys made with 3 passes' do
       journeys = Journey.find_complex_journeys(@journeys, 3)
       expect(journeys.first[:passes].count).to eq(3)
+      expect(journeys.count).to eq(1)
+    end
+    it 'returns complex journeys made with 4 passes' do
+      @journeys = Journey.all.includes(:waypoints)
+      start_point = FactoryGirl.build(:waypoint_35)
+      finish_point = FactoryGirl.build(:waypoint_73)
+
+      @parameters = { date: '2016-01-01',
+                      start_lat: start_point.point.x,
+                      start_lng: start_point.point.y,
+                      finish_lat: finish_point.point.x,
+                      finish_lng: finish_point.point.y,
+                      start_time: '13:30'
+      }
+      @journeys = Journey.sort_journeys(@journeys, @parameters)
+      journeys = Journey.find_complex_journeys(@journeys, 4)
+      expect(journeys.first[:passes].count).to eq(4)
       expect(journeys.count).to eq(1)
     end
   end

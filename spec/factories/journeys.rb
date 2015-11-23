@@ -149,6 +149,13 @@ FactoryGirl.define do
           FactoryGirl.create(:waypoint_53, time: '15:15', journey: journey)
         end
       end
+      factory :journey_55_73 do
+        spaces 15
+        after(:create) do |journey|
+          FactoryGirl.create(:waypoint_55, time: '15:25', journey: journey)
+          FactoryGirl.create(:waypoint_73, time: '15:30', journey: journey)
+        end
+      end
     end
   end
 end

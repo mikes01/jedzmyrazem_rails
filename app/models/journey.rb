@@ -126,49 +126,79 @@ class Journey < ActiveRecord::Base
     !p1.nil? && !p2.nil? && p1 > j1_start && p2 < j2_finish
   end
 
-  def find_intersection_point(journey)
-    journey.waypoints[0..-2].each_with_index do |point, i|
-      waypoints[1..-1].each_with_index do |self_point, j|
+  def find_intersection_point(journey, min = 1, max = -2)
+    journey.waypoints[0..max].each_with_index do |point, i|
+      waypoints[min..-1].each_with_index do |self_point, j|
         if point.point.distance(self_point.point) < 1000 &&
            point.time > self_point.time
-          return j + 1, i
+          return j + min, i
         end
       end
     end
     [nil, nil]
   end
 
-  def self.find_complex_journeys(sorted_js, max_intermediates)
+  def self.find_complex_journeys(sorted_js, max_passes)
     results = []
     sorted_js[:with_start].each do |j|
       results.concat j[:journey].find_way_to_finish(sorted_js,
                                                     j[:start],
-                                                    max_intermediates)
+                                                    max_passes - 2)
     end
     results
   end
 
-  def find_way_to_finish(sorted_js, start, _max_intermediates)
+  def find_way_to_finish(sorted_js, start, max_middle)
     results = []
     sorted_js[:rest].each do |jr|
-      p1, p2, jf, p21, p22 =
-        jr[:journey].connect_start_rests_and_finish(self, sorted_js, start)
-      next if jf.nil? || p21 < p2
-      results.push passes: [format, jr[:journey].format, jf[:journey].format],
-                   intersections: [p1, p2, p21, p22]
+      p1, p2 = find_intersection_point(jr[:journey], start + 1, -2)
+      next if p1.nil? || p2.nil?
+      candidate = { passes: [self, jr[:journey]], intersections: [p1, p2] }
+      candidate =
+        connect_start_rests_and_finish(candidate, sorted_js, max_middle - 1)
+      next if candidate.nil?
+      results.push candidate
     end
     results
   end
 
-  def connect_start_rests_and_finish(start, sorted_js, start_index)
-    p1, p2 = start.find_intersection_point(self)
-    if !p1.nil? && !p2.nil? && p1 > start_index
-      sorted_js[:with_finish].each do |jf|
-        p21, p22 = find_intersection_point(jf[:journey])
-        return p1, p2, jf, p21, p22 if Journey.finish?(p21, p22, jf[:finish])
+  def connect_start_rests_and_finish(candidate, sorted_js, max_middle)
+    sorted_js[:with_finish].each do |jf|
+      p1, p2 = candidate[:passes].last
+               .find_intersection_point(jf[:journey],
+                                        candidate[:intersections].last + 1,
+                                        jf[:finish])
+      if p1.nil? || p2.nil?
+        next if max_middle == 0
+        if Journey.add_middle_journey(candidate, sorted_js[:rest])
+          return candidate[:passes].last
+            .connect_start_rests_and_finish(candidate,
+                                            sorted_js, max_middle - 1)
+        else
+          next
+        end
+      else
+        candidate[:passes].push jf[:journey]
+        candidate[:intersections].push p1
+        candidate[:intersections].push p2
+        return candidate
       end
     end
-    [nil, nil, nil, nil, nil]
+    nil
+  end
+
+  def self.add_middle_journey(candidate, journeys)
+    journeys.each do |j|
+      p1, p2 = candidate[:passes].last
+               .find_intersection_point(j[:journey],
+                                        candidate[:intersections].last + 1, -2)
+      next if p1.nil? || p2.nil?
+      candidate[:passes].push j[:journey]
+      candidate[:intersections].push p1
+      candidate[:intersections].push p2
+      return true
+    end
+    false
   end
 
   def self.finish?(p1, p2, finish)
