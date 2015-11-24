@@ -33,14 +33,14 @@ section#main-content
           th 
             | {{$index}}
           th 
-            | {{journey.date}}
+            | {{journey.passes[0].date}} 
           th
-            | {{journey.spaces}}
+            | {{journey.passes[0].spaces}}
           th
-            reverse-geocode lat="{{journey.waypoints[0].point.lat}}" lng="{{journey.waypoints[0].point.lng}}"
-            | {{journey.waypoints[0].time | date: 'HH:mm'}}
+            | {{journey.passes[0].waypoints[journey.start].name}}
+            | {{journey.passes[0].waypoints[journey.start].time | date: 'HH:mm'}}
           th
-            reverse-geocode lat="{{journey.waypoints[journey.waypoints.length - 1].point.lat}}" lng="{{journey.waypoints[journey.waypoints.length - 1].point.lng}}"
-            | {{journey.waypoints[journey.waypoints.length - 1].time | date: 'HH:mm'}}
+            | {{journey.passes[0].waypoints[journey.finish].name}}
+            | {{journey.passes[0].waypoints[journey.finish].time | date: 'HH:mm'}}
           th 
             | {{journey.user}}

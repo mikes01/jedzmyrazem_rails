@@ -19,7 +19,8 @@ class Journey < ActiveRecord::Base
     waypoints.each do |waypoint|
       result['waypoints'].push("point":
         { "lat": waypoint.point.x, "lng": waypoint.point.y },
-                               "time": waypoint.time)
+                               "time": waypoint.time,
+                               "name": waypoint.name)
     end
     result['user'] = driver.username
     result
@@ -29,7 +30,9 @@ class Journey < ActiveRecord::Base
     candidates = Journey.get_journeys_in_period(parameters[:start_time],
                                                 parameters[:date])
     sorted_js = Journey.sort_journeys(candidates, parameters)
-    Journey.get_matched_journeys_from_sorted_journeys(sorted_js)
+    j = Journey.get_matched_journeys_from_sorted_journeys(sorted_js)
+    p j.as_json
+    j
   end
 
   def self.get_journeys_in_period(start_time, date)

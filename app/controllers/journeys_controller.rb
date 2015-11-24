@@ -13,12 +13,13 @@ class JourneysController < ApplicationController
     result = Journey.search_journeys(parameters)
 
     render json: { status: :ok, journey: result }
-    # rescue StandardError => e
-    #  render json: { status: :unprocessable_entity, error: e.to_s }
+  rescue StandardError => e
+    render json: { status: :unprocessable_entity, error: e.to_s }
   end
 
   def journey_params
-    params.require(:journey).permit(:date, :spaces, path: [:time, point: []])
+    params.require(:journey)
+      .permit(:date, :spaces, path: [:time, :name, point: []])
   end
 
   def search_params

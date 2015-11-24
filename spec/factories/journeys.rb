@@ -4,11 +4,14 @@ FactoryGirl.define do
       spaces 6
       date '2015-05-14'
       path [{ 'point' => [51.1141377, 17.0534637],
-              'time' => '12:50' },
+              'time' => '12:50',
+              'name' => 'first' },
             { 'point' => [51.114811, 17.066875],
-              'time' => '13:01' },
+              'time' => '13:01',
+              'name' => 'first' },
             { 'point' => [51.116724, 17.051382],
-              'time' => '14:51' }]
+              'time' => '14:51',
+              'name' => 'first' }]
 
       initialize_with { attributes }
     end

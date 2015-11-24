@@ -174,8 +174,9 @@ angular.module 'JedzmyrazemApp'
       
       journey = {path: [], date: moment($scope.dt).format("YYYY-MM-DD"),
       spaces: $scope.spaces}
+      console.log journey
       journey.path.push {time: moment($scope.start.time).format("HH:mm"),
-      point: []}
+      point: [], name: $scope.start.place.name}
       journey.path[0].point.push $scope.start.place.geometry.location.lat()
       journey.path[0].point.push $scope.start.place.geometry.location.lng()
 
@@ -184,9 +185,7 @@ angular.module 'JedzmyrazemApp'
 
       while(i < $scope.waypoints.length)
         journey.path.push {time: moment($scope.waypoints[i].time)
-        .format("HH:mm"), point: []}
-        console.log i
-        console.log journey.path
+        .format("HH:mm"), point: [], name: $scope.waypoints[i].place.name}
         journey.path[i+1].point.push $scope.waypoints[i].
         place.geometry.location.lat()
         journey.path[i+1].point.push $scope.waypoints[i].
@@ -194,12 +193,13 @@ angular.module 'JedzmyrazemApp'
         i++
 
       journey.path.push {time: moment($scope.finish.time).format("HH:mm"),
-      point: []}
+      point: [], name: $scope.finish.place.name}
       journey.path[journey.path.length-1].point.push $scope.finish.place.
       geometry.location.lat()
       journey.path[journey.path.length-1].point.push $scope.finish.place.
       geometry.location.lng()
 
+      console.log journey
       Journey.createJourney(journey).success (data) ->
         console.log data
       .error (data) ->
