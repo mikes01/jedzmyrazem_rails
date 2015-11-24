@@ -10,11 +10,11 @@ class JourneysController < ApplicationController
 
   def search
     parameters = search_params
-    result = Journey.get_formated_journays(parameters)
+    result = Journey.search_journeys(parameters)
 
     render json: { status: :ok, journey: result }
-  rescue StandardError => e
-    render json: { status: :unprocessable_entity, error: e.to_s }
+    # rescue StandardError => e
+    #  render json: { status: :unprocessable_entity, error: e.to_s }
   end
 
   def journey_params

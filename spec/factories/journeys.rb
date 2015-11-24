@@ -13,14 +13,25 @@ FactoryGirl.define do
       initialize_with { attributes }
     end
 
+    factory :search_params, class: Hash do
+      date '2016-01-01'
+      start_time '12:25'
+      start_lat '51.149297'
+      start_lng '17.033582'
+      finish_lat '51.132724'
+      finish_lng '17.106824'
+
+      initialize_with { attributes }
+    end
+
     factory :journeys do
       date '2016-01-01'
       driver_id 1
       factory :journey_11_21_41_51_61_71_81 do
         spaces 0
         after(:create) do |journey|
-          FactoryGirl.create(:waypoint_11, time: '12:00', journey: journey)
-          FactoryGirl.create(:waypoint_21, time: '12:15', journey: journey)
+          FactoryGirl.create(:waypoint_11, time: '12:30', journey: journey)
+          FactoryGirl.create(:waypoint_21, time: '12:35', journey: journey)
           FactoryGirl.create(:waypoint_41, time: '12:45', journey: journey)
           FactoryGirl.create(:waypoint_51, time: '13:00', journey: journey)
           FactoryGirl.create(:waypoint_61, time: '13:15', journey: journey)
@@ -32,9 +43,9 @@ FactoryGirl.define do
       factory :journey_82_72_62_52_42_32_22_12 do
         spaces 1
         after(:create) do |journey|
-          FactoryGirl.create(:waypoint_82, time: '12:00', journey: journey)
-          FactoryGirl.create(:waypoint_72, time: '12:15', journey: journey)
-          FactoryGirl.create(:waypoint_62, time: '12:30', journey: journey)
+          FactoryGirl.create(:waypoint_82, time: '12:30', journey: journey)
+          FactoryGirl.create(:waypoint_72, time: '12:35', journey: journey)
+          FactoryGirl.create(:waypoint_62, time: '12:40', journey: journey)
           FactoryGirl.create(:waypoint_52, time: '12:45', journey: journey)
           FactoryGirl.create(:waypoint_42, time: '13:00', journey: journey)
           FactoryGirl.create(:waypoint_32, time: '13:15', journey: journey)
@@ -154,6 +165,30 @@ FactoryGirl.define do
         after(:create) do |journey|
           FactoryGirl.create(:waypoint_55, time: '15:25', journey: journey)
           FactoryGirl.create(:waypoint_73, time: '15:30', journey: journey)
+        end
+      end
+
+      factory :journey_84_71 do
+        spaces 16
+        after(:create) do |journey|
+          FactoryGirl.create(:waypoint_84, time: '12:30', journey: journey)
+          FactoryGirl.create(:waypoint_71, time: '12:35', journey: journey)
+        end
+      end
+
+      factory :journey_72_51 do
+        spaces 17
+        after(:create) do |journey|
+          FactoryGirl.create(:waypoint_72, time: '12:40', journey: journey)
+          FactoryGirl.create(:waypoint_51, time: '12:45', journey: journey)
+        end
+      end
+
+      factory :journey_55_62 do
+        spaces 18
+        after(:create) do |journey|
+          FactoryGirl.create(:waypoint_55, time: '12:50', journey: journey)
+          FactoryGirl.create(:waypoint_62, time: '12:55', journey: journey)
         end
       end
     end
