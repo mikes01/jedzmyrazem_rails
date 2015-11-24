@@ -13,26 +13,16 @@ class Journey < ActiveRecord::Base
     end
   end
 
-  def format
-    result = as_json
-    result['waypoints'] = []
-    waypoints.each do |waypoint|
-      result['waypoints'].push("point":
-        { "lat": waypoint.point.x, "lng": waypoint.point.y },
-                               "time": waypoint.time,
-                               "name": waypoint.name)
-    end
-    result['user'] = driver.username
-    result
+  def add_ends(start, finish)
+    { journey: self, start: start, finish: finish }
   end
 
   def self.search_journeys(parameters)
     candidates = Journey.get_journeys_in_period(parameters[:start_time],
                                                 parameters[:date])
     sorted_js = Journey.sort_journeys(candidates, parameters)
-    j = Journey.get_matched_journeys_from_sorted_journeys(sorted_js)
-    p j.as_json
-    j
+    journeys = Journey.get_matched_journeys_from_sorted_journeys(sorted_js)
+    Journey.sort_and_format_response(journeys)
   end
 
   def self.get_journeys_in_period(start_time, date)
@@ -58,7 +48,7 @@ class Journey < ActiveRecord::Base
   end
 
   def self.sort_journeys(journeys, parameters)
-    sorted_js = { direct: [], with_start: [], with_finish: [], rest: [] }
+    sorted_js = { direct: [], with_start: [], with_finish: [], middle: [] }
     journeys.each_with_index do |journey|
       start, finish = journey.find_start_and_finish(parameters)
       sorted_js[journey
@@ -77,7 +67,7 @@ class Journey < ActiveRecord::Base
     elsif !finish.nil?
       return :with_finish
     else
-      return :rest
+      return :middle
     end
   end
 
@@ -94,8 +84,8 @@ class Journey < ActiveRecord::Base
   def self.find_direct_journeys(sorted_js)
     results = []
     sorted_js[:direct].each do |j|
-      results.push passes: [j[:journey].format],
-                   intersections: [], start: j[:start], finish: j[:finish]
+      results.push passes:
+        [j[:journey].add_ends(j[:start], j[:finish])]
     end
     results
   end
@@ -104,10 +94,10 @@ class Journey < ActiveRecord::Base
     results = []
     array_of_journeys.each do |j|
       p1, p2 = journey[:journey].find_intersection_point(j[:journey])
-      if self.possible_connection?(p1, p2, journey[:start], j[:finish])
-        results.push passes: [journey[:journey].format, j[:journey].format],
-                     intersections: [p1, p2]
-      end
+      next unless self.possible_connection?(p1, p2, journey[:start], j[:finish])
+      results.push passes: [journey[:journey]
+        .add_ends(journey[:start], p1),
+                            j[:journey].add_ends(p2, j[:finish])]
     end
     results
   end
@@ -131,57 +121,60 @@ class Journey < ActiveRecord::Base
   def self.find_complex_journeys(sorted_js, max_passes)
     results = []
     sorted_js[:with_start].each do |j|
-      results.concat j[:journey].find_way_to_finish(sorted_js,
+      results.concat j[:journey].find_way_to_finish(sorted_js[:middle],
+                                                    sorted_js[:with_finish],
                                                     j[:start],
                                                     max_passes - 2)
     end
     results
   end
 
-  def find_way_to_finish(sorted_js, start, max_middle)
+  def find_way_to_finish(middles, finishes, start, max_middle)
     results = []
-    sorted_js[:rest].each do |jr|
+    middles.each do |jr|
       p1, p2 = find_intersection_point(jr[:journey], start + 1, -2)
-      next if p1.nil? || p2.nil?
-      candidate = { passes: [self, jr[:journey]], intersections: [p1, p2] }
-      results.push candidate unless
-        jr[:journey].connect_start_rests_and_finish(
-          candidate, sorted_js, max_middle - 1).nil?
+      next if not_intersect?(p1, p2)
+      new_j = { passes: [add_ends(start, p1), jr[:journey].add_ends(p2, nil)] }
+      results.push new_j unless
+        jr[:journey].connect_start_middles_and_finish(
+          new_j, middles, finishes, max_middle - 1).nil?
     end
     results
   end
 
-  def connect_start_rests_and_finish(candidate, sorted_js, max_middle)
-    sorted_js[:with_finish].each do |jf|
-      p1, p2 = find_intersection_point(jf[:journey],
-                                       candidate[:intersections].last + 1,
-                                       jf[:finish])
-      r = find_way(candidate, max_middle, sorted_js, jf[:journey], [p1, p2])
-      return r unless r.nil?
+  def connect_start_middles_and_finish(candidate, middles, finishes, max_middle)
+    finishes.each do |jf|
+      res = jf[:journey].find_way(candidate, max_middle, middles, finishes,
+                                  find_intersection_point(jf[:journey],
+                                                          candidate[:passes]
+                                                            .last[:start],
+                                                          jf[:finish]))
+      return candidate[:passes].last[:finish] = jf[:finish] unless res.nil?
     end
     nil
   end
 
-  def find_way(candidate, max_middle, sorted_js, finish, points)
+  def find_way(candidate, max_middle, middles, finishes, points)
     if not_intersect?(points.first, points.last)
-      return nil if go_deeper?(max_middle, candidate, sorted_js[:rest])
-      return candidate[:passes].last
-        .connect_start_rests_and_finish(candidate, sorted_js, max_middle - 1)
+      return nil if go_deeper?(max_middle, candidate, middles)
+      return candidate[:passes].last[:journey]
+        .connect_start_middles_and_finish(candidate, middles, finishes,
+                                          max_middle - 1)
     else
       return Journey.fill_candidate(points.first,
-                                    points.last, finish, candidate)
+                                    points.last, self, candidate)
     end
   end
 
-  def go_deeper?(max_middle, candidate, rests)
-    max_middle == 0 || !add_middle(candidate, rests)
+  def go_deeper?(max_middle, candidate, middles)
+    max_middle == 0 || !add_middle(candidate, middles)
   end
 
   def add_middle(candidate, journeys)
     journeys.each do |j|
-      p1, p2 = candidate[:passes].last
+      p1, p2 = candidate[:passes].last[:journey]
                .find_intersection_point(j[:journey],
-                                        candidate[:intersections].last + 1, -2)
+                                        candidate[:passes].last[:start] + 1, -2)
       next if not_intersect?(p1, p2)
       candidate = Journey.fill_candidate(p1, p2, j[:journey], candidate)
       return true
@@ -198,8 +191,40 @@ class Journey < ActiveRecord::Base
   end
 
   def self.fill_candidate(p1, p2, journey, candidate)
-    candidate[:passes].push journey
-    candidate[:intersections].push p1, p2
+    candidate[:passes].last[:finish] = p1
+    candidate[:passes].push journey.add_ends(p2, nil)
     candidate
+  end
+
+  def self.sort_and_format_response(journeys)
+    response = []
+    Journey.sort(journeys).each do |j|
+      response.push []
+      j[:passes].each do |pass|
+        response.last.push pass[:journey].format(pass[:start], pass[:finish])
+      end
+    end
+    response
+  end
+
+  def self.sort(journeys)
+    journeys.sort! do |a, b|
+      Journey.get_start_time(a[:passes]) <=> Journey.get_start_time(b[:passes])
+    end
+    journeys
+  end
+
+  def self.get_start_time(passes)
+    passes.first[:journey].waypoints[passes.first[:start]].time
+  end
+
+  def format(start, finish)
+    result = as_json
+    result['waypoints'] = []
+    waypoints[start..finish].each do |waypoint|
+      result['waypoints'].push(waypoint.format)
+    end
+    result['user'] = driver.username
+    result
   end
 end

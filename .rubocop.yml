@@ -4,4 +4,4 @@ AllCops:
     - 'db/**/*'
     - 'bin/**/*'
 Metrics/ClassLength:
-  Max: 200
+  Max: 250

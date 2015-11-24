@@ -10,4 +10,11 @@ class Waypoint < ActiveRecord::Base
       Waypoint.create!(point)
     end
   end
+
+  def format
+    { "point":
+        { "lat": point.x, "lng": point.y },
+      "time": time,
+      "name": name }
+  end
 end

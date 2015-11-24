@@ -46,13 +46,7 @@ RSpec.describe Journey, type: :model do
       it 'return journeys made with one pass' do
         journeys = Journey.search_journeys @parameters
         journeys.each do |j|
-          expect(j[:passes].count). to eq(1)
-        end
-      end
-      it 'return journeys without intersections' do
-        journeys = Journey.search_journeys @parameters
-        journeys.each do |j|
-          expect(j[:intersections].count). to eq(0)
+          expect(j.count). to eq(1)
         end
       end
     end
@@ -77,13 +71,7 @@ RSpec.describe Journey, type: :model do
       it 'return journeys made with two passes' do
         journeys = Journey.search_journeys @parameters
         journeys.each do |j|
-          expect(j[:passes].count).to eq(2)
-        end
-      end
-      it 'return journeys with two intersections' do
-        journeys = Journey.search_journeys @parameters
-        journeys.each do |j|
-          expect(j[:intersections].count).to eq(2)
+          expect(j.count).to eq(2)
         end
       end
     end
@@ -107,11 +95,7 @@ RSpec.describe Journey, type: :model do
       end
       it 'return journeys made with more than two passes' do
         journeys = Journey.search_journeys @parameters
-        expect(journeys.first[:passes].count).to be > 2
-      end
-      it 'return journeys with more than two intersections' do
-        journeys = Journey.search_journeys @parameters
-        expect(journeys.first[:intersections].count).to be > 2
+        expect(journeys.first.count).to be > 2
       end
     end
   end
@@ -145,7 +129,7 @@ RSpec.describe Journey, type: :model do
     end
     it('find all journeys without finish_point and start_point') do
       sorted_journeys = Journey.sort_journeys(@journeys, @parameters)
-      expect(sorted_journeys[:rest].count).to eq(3)
+      expect(sorted_journeys[:middle].count).to eq(3)
     end
   end
 

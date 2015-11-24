@@ -19,28 +19,26 @@ section#main-content
               i.glyphicon.glyphicon-calendar
       button.btn.btn-default ng-click="search()" Szukaj
 
-    table.table.table-hover
-      thead
-        tr
-          th #
-          th Data
-          th Wolne miejsca
-          th Początek
-          th Koniec
-          th Kierowca
-      tbody
-        tr ng-repeat="journey in journeys"
-          th 
-            | {{$index}}
-          th 
-            | {{journey.passes[0].date}} 
-          th
-            | {{journey.passes[0].spaces}}
-          th
-            | {{journey.passes[0].waypoints[journey.start].name}}
-            | {{journey.passes[0].waypoints[journey.start].time | date: 'HH:mm'}}
-          th
-            | {{journey.passes[0].waypoints[journey.finish].name}}
-            | {{journey.passes[0].waypoints[journey.finish].time | date: 'HH:mm'}}
-          th 
-            | {{journey.user}}
+    div ng-show="journeys.length > 0"
+      div ng-repeat="journey in journeys"
+        uib-accordion
+          uib-accordion-group heading="Z:{{journey[0].waypoints[0].name}} {{journey[0].waypoints[0].time | date: 'HH:mm'}} Do: {{journey[journey.length - 1].waypoints[journey[journey.length - 1].waypoints.length -1].name}} {{journey[journey.length - 1].waypoints[journey[journey.length - 1].waypoints.length -1].time | date: 'HH:mm'}} Przesiadki: {{journey.length-1}}" ng-init="open=($index==0)" is-open="open"
+            ul
+              li ng-repeat="pass in journey"
+                b
+                  | {{pass.waypoints[0].name}} {{pass.waypoints[0].time | date: 'HH:mm'}}
+                '
+                | -
+                '
+                b
+                  | {{pass.waypoints[pass.waypoints.length-1].name}} {{pass.waypoints[pass.waypoints.length-1].time | date: 'HH:mm'}}
+                '
+                | Kierowca:
+                '
+                b
+                  | {{pass.user}}
+                '
+                | Miejsca:
+                '
+                b
+                  | {{pass.spaces}}

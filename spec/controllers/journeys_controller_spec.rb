@@ -54,9 +54,9 @@ RSpec.describe JourneysController, type: :controller do
       it 'returns journeys with diffrent complex' do
         post :search, params: FactoryGirl.attributes_for(:search_params),
                       format: :json
-        expect(JSON.parse(response.body)['journey'][0]['passes'].count).to eq(1)
-        expect(JSON.parse(response.body)['journey'][1]['passes'].count).to eq(2)
-        expect(JSON.parse(response.body)['journey'][2]['passes'].count).to eq(3)
+        expect(JSON.parse(response.body)['journey'][0].count).to eq(1)
+        expect(JSON.parse(response.body)['journey'][1].count).to eq(3)
+        expect(JSON.parse(response.body)['journey'][2].count).to eq(2)
       end
     end
   end
