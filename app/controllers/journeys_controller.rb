@@ -23,7 +23,7 @@ class JourneysController < ApplicationController
   end
 
   def search_params
-    params.require(:params).permit(:date, :start_lat, :start_lng,
-                                   :finish_lat, :finish_lng, :start_time)
+    params.permit(:date, :start_lat, :start_lng,
+                  :finish_lat, :finish_lng, :start_time)
   end
 end

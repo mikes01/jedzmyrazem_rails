@@ -2,7 +2,6 @@ Rails.application.routes.draw do
   devise_for :users, :controllers => { registrations: 'registrations' }
   root 'home#index'
 
-  resources :journeys
-
-  post 'journeys/search', to: 'journeys#search'
+  post 'journeys', to: 'journeys#create'
+  get 'journeys', to: 'journeys#search'
 end
