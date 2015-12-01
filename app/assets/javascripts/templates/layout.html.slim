@@ -1,25 +1,35 @@
 section id="container" class=""
-  header class="header dark-bg"
+  header.dark-bg
+    .collapse.navbar-collapse.navbar-ex1-collapse
+      ul.nav.navbar-nav
+        li
+          a.logo href="/#/home"
+            | Jedźmy
+            span.lite razem
+        li.nav-link
+          a href="#/home"  Szukaj przejazdu
+        li.nav-link ng-show="user"
+          a href="#/create_journey" Dodaj przejazd
+        li.nav-link ng-hide="user"
+          a href="#/sign_in"  Zaloguj się
+        li.nav-link ng-hide="user"
+          a href="#/sign_up" Utwórz konto
 
-    a.logo href="index.html" 
-      | Jedzmy
-      span.lite razem
-
-    div.top-nav.notification-row             
-      ul.nav.pull-right.top-menu
-        li.dropdown
-          a.dropdown-toggle data-toggle="dropdown" href="#"
-            span class="username"
-              | {{user.username}}
-            b.caret
-          ul.dropdown-menu.extended.logout
-            div.log-arrow-up
-            li.eborder-top
-              a href="#/edit_user"
-                i.icon_profile
-                | Edytuj konto
-            li ng-click="signOut()"
-              a href=""
-                i.icon_key_alt
-                | Wyloguj
+      .top-nav.notification-row
+        ul.nav.pull-right.top-menu ng-show="user"
+          li.dropdown
+            a.dropdown-toggle data-toggle="dropdown" href="#"
+              span class="username"
+                | {{user.username}}
+              b.caret
+            ul.dropdown-menu.extended.logout
+              div.log-arrow-up
+              li.eborder-top
+                a href="#/edit_user"
+                  i.icon_profile
+                  | Edytuj konto
+              li ng-click="signOut()"
+                a href=""
+                  i.icon_key_alt
+                  | Wyloguj
   div ui-view=""

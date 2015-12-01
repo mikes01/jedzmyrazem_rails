@@ -8,7 +8,8 @@ angular.module 'JedzmyrazemApp'
 
     $scope.signOut = () ->
       Auth.logout().then((user) ->
-        $location.path('/sign_in')
+        $scope.user = ''
+        $location.path('/home')
       (error) ->
         console.log('error')
       )

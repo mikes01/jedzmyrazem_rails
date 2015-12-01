@@ -112,19 +112,15 @@ angular.module('JedzmyrazemApp')
         result = true
         if $scope.user.password == '' ||
         typeof($scope.user.password) == 'undefined'
-          console.log '1'
           $scope.validate.password_require = true
           result = false
         if $scope.user.password_confirmation == '' ||
         typeof($scope.user.password_confirmation) == 'undefined'
           $scope.validate.password_confirmation_require = true
           result = false
-          console.log '2'
         if $scope.validate.password_confirmation_format ||
         $scope.validate.password_format
           result = false
-          console.log '3'
-        console.log result
         result
 
 
