@@ -4,28 +4,50 @@
       .login-wrap
         p.login-img
           i.icon_lock_alt
-        .input-group
+        #email.input-group
           span.input-group-addon
             i.icon_mail
-          input.form-control autofocus="" ng-model="user.email" placeholder="Email" type="email" /
-        .input-group
+          input.form-control autofocus="" ng-model="user.email" placeholder="Email" type="text" /
+        div ng-show="validate.email_require" 
+          label.error for="email" Pole email jest wymagane
+          br
+        label.error for="email" ng-show="validate.email_format" Wprowadzony email jest niepoprawny
+        #username.input-group
           span.input-group-addon
             i.icon_profile
           input.form-control autofocus="" ng-model="user.username" placeholder="Nazwa użytkownika" type="text" /
-        .input-group
+        div ng-show="validate.username_require" 
+          label.error for="username" Pole nazwa użytkownika jest wymagane
+        #phone.input-group
           span.input-group-addon
             i.icon_phone
           input.form-control autofocus="" ng-model="user.phone" placeholder="Numer telefonu" type="text" /
-        .input-group
+        div ng-show="validate.phone_require"
+          label.error for="phone"Pole numer telefonu jest wymagane
+          br
+        label.error for="phone" ng-show="validate.phone_format" Wprowadź 9 cyfrowy numer swojego telefomu
+        #password.input-group
           span.input-group-addon
             i.icon_key_alt
           input.form-control ng-model="user.password" placeholder="Hasło" type="password" /
-        .input-group
+        div ng-show="validate.password_require"
+          label.error for="password" Pole hasło jest wymagane
+          br
+        label.error for="password" ng-show="validate.password_format" Hasło musi mieć conajmniej 8 znaków
+        #password_confirmation.input-group
           span.input-group-addon
             i.icon_key_alt
           input.form-control ng-model="user.password_confirmation" placeholder="Potwierdź hasło" type="password" /
-        .input-group
+        div ng-show="validate.password_confirmation_require"
+          label.error for="password_confirmation" Pole potwierdzenie hasła jest wymagane
+          br
+        label.error for="password" ng-show="validate.password_confirmation_format" Potwierdzenie nie zgadza się z hasłem
+        #current_password.input-group
           span.input-group-addon
             i.icon_key_alt
           input.form-control ng-model="user.current_password" placeholder="Aktualne hasło" type="password" /
+        div ng-show="validate.current_password_require"
+          label.error for="current_password" Pole aktaualne hasło jest wymagane
+          br
+        label.error for="current_password" ng-show="validate.current_password_format" Hasło musi mieć conajmniej 8 znaków
         button.btn.btn-primary.btn-lg.btn-block ng-click="editUser()" Edytuj

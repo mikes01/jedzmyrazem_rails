@@ -30,6 +30,7 @@ angular.module 'JedzmyrazemApp'
         templateUrl: 'reset_password.html'
       })
       .state('edit_user', {
+        parent: 'index',
         url: '/edit_user',
         controller: 'HomeCtrl',
         templateUrl: 'edit_user.html'

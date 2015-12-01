@@ -23,7 +23,7 @@
             i.icon_phone
           input.form-control autofocus="" ng-model="user.phone" placeholder="Numer telefonu" type="text" /
         div ng-show="validate.phone_require"
-          label.error for="phone" ng-show="validate.phone_require" Pole numer telefonu jest wymagane
+          label.error for="phone" Pole numer telefonu jest wymagane
           br
         label.error for="phone" ng-show="validate.phone_format" Wprowadź 9 cyfrowy numer swojego telefomu
         #password.input-group
@@ -31,7 +31,7 @@
             i.icon_key_alt
           input.form-control ng-model="user.password" placeholder="Hasło" type="password" /
         div ng-show="validate.password_require"
-          label.error for="password" ng-show="validate.password_require" Pole hasło jest wymagane
+          label.error for="password" Pole hasło jest wymagane
           br
         label.error for="password" ng-show="validate.password_format" Hasło musi mieć conajmniej 8 znaków
         #password_confirmation.input-group
@@ -39,7 +39,7 @@
             i.icon_key_alt
           input.form-control ng-model="user.password_confirmation" placeholder="Potwierdź hasło" type="password" /
         div ng-show="validate.password_confirmation_require"
-          label.error for="password_confirmation" ng-show="validate.password_confirmation_require" Pole potwierdzenie hasła jest wymagane
+          label.error for="password_confirmation" Pole potwierdzenie hasła jest wymagane
           br
         label.error for="password" ng-show="validate.password_confirmation_format" Potwierdzenie nie zgadza się z hasłem
         button.btn.btn-primary.btn-lg.btn-block ng-click="signUp()" Utwórz konto
