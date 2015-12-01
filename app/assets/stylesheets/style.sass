@@ -157,7 +157,7 @@ table tr th
     font-size: 50px
     font-weight: 300
   .input-group
-    padding-bottom: 15px
+    padding-bottom: 1px
   .input-group-addon
     padding: 6px 12px
     font-size: 16px
@@ -3423,8 +3423,25 @@ ul.amounts li
 .form-validate .form-group label.error
   display: inline
   margin: 5px 0
+  color: #f0a000
+  font-weight: 400
+
+.error
+  display: inline
+  margin: 5px 0
+  color: #af0000
+  font-weight: 400
+
+.reminder
+  display: inline
+  margin: 5px 0
   color: #00a0df
   font-weight: 400
+  margin-bottom: 15px
+  margin-top: 15px
+  &:hover, &:focus
+    border: none
+    color: #00a0df
 
 input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:focus
   border-color: #00a0df !important

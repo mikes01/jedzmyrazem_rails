@@ -1,5 +1,5 @@
 angular.module('JedzmyrazemApp', ['templates', 'ui.router', 'Devise', 'ngMap',
-  'google.places', 'ui.bootstrap', 'mgcrea.ngStrap'])
+  'google.places', 'ui.bootstrap', 'mgcrea.ngStrap', 'toastr'])
   .config ($provide, $httpProvider) ->
     # CSFR token
     $httpProvider.defaults.headers.common['X-CSRF-Token'] =

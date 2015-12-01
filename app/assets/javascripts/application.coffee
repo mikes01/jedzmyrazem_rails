@@ -13,6 +13,7 @@
 #= require angular-i18n/angular-locale_pl-pl
 #= require moment
 #= require angular-strap
+#= require angular-toastr
 
 
 #= require_tree ./templates

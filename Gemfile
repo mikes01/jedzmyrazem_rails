@@ -65,4 +65,5 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-moment', '~> 2.10.6'
   gem 'rails-assets-fontawesome'
   gem 'rails-assets-angular-strap'
+  gem 'rails-assets-angular-toastr', '~> 0.4.0'
 end

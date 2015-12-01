@@ -1,18 +1,28 @@
 .login-img3-body
   .container
-    div.login-form
+    form.login-form.form-validate
       .login-wrap
         p.login-img
           i.icon_lock_alt
-        .input-group
-          span.input-group-addon
-            i.icon_mail
-          input.form-control autofocus="" ng-model="user.email" placeholder="Email" type="text" /
-        .input-group
+        form-group
+          #email.input-group
+            span.input-group-addon
+              i.icon_mail
+            input.form-control autofocus="" ng-model="user.email" placeholder="Email" type="text"
+          div ng-show="validate.email_require" 
+            label.error for="email" Pole email jest wymagane
+            br
+          label.error for="email" ng-show="validate.email_format" Wprowadzony email jest niepoprawny
+
+        #password.input-group
           span.input-group-addon
             i.icon_key_alt
-          input.form-control ng-model="user.password" placeholder="Hasło" type="password" /
-        label.checkbox
+          input.form-control ng-model="user.password" placeholder="Hasło" type="password"
+        div ng-show="validate.password_require"
+          label.error for="password" ng-show="validate.password_require" Pole hasło jest wymagane
+          br
+        label.error for="password" ng-show="validate.password_format" Hasło musi mieć conajmniej 8 znaków
+        label.reminder
           span.pull-right
             a href="#/reset_password"  Nie pamiętasz hasła?
         button.btn.btn-primary.btn-lg.btn-block ng-click="signIn()"  Zaloguj się
