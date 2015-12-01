@@ -15,14 +15,14 @@ section#main-content
               div.b Z:
               div.form-group.col-md-6 
                 div.input-group
-                  input.form-control ng-model="start.place" g-places-autocomplete="" options="autocompleteOptions" force-selection="true" ng-change="getRoutePointsAndWaypoints()"
+                  input.form-control ng-model="waypoints[0].place" g-places-autocomplete="" options="autocompleteOptions" force-selection="true" ng-change="getRoutePointsAndWaypoints()"
               div.input-group.col-md-5
-                input.form-control bs-timepicker="" data-arrow-behavior="picker" data-length="1" data-minute-step="1" data-time-format="HH:mm" name="time" ng-model="start.time" size="8" type="text" data-bs-show="start.timeshow" trigger="manual" ng-change="checkStartTime()"
+                input.form-control bs-timepicker="" data-arrow-behavior="picker" data-length="1" data-minute-step="1" data-time-format="HH:mm" name="time" ng-model="waypoints[0].time" size="8" type="text" data-bs-show="waypoints[0].timeshow" trigger="manual" ng-change="updateTimes(0, {{waypoints[0].time}})"
                 span.input-group-btn
-                  button.btn.btn-default type="button" ng-click="start.timeshow = !start.timeshow"
+                  button.btn.btn-default type="button" ng-click="waypoints[0].timeshow = !waypoints[0].timeshow"
                     i.glyphicon.glyphicon-time
 
-        div ng-repeat="place in waypoints track by $index"
+        div ng-repeat="place in waypoints track by $index" ng-hide="$first || $last"
           .row
             form.inline-form
               div.form-group.col-md-6 
@@ -32,7 +32,7 @@ section#main-content
                     button.btn.btn-default type="button" ng-click="removeWayPoint($index)"
                       i.glyphicon.glyphicon-remove
               div.input-group.col-md-5
-                input.form-control bs-timepicker="" data-arrow-behavior="picker" data-length="1" data-minute-step="1" data-time-format="HH:mm" name="time" ng-model="waypoints[$index].time" size="8" type="text" data-bs-show="waypoints[$index].timeshow" trigger="manual" ng-change="checkWaypointTime($index, {{waypoints[$index].time}})"
+                input.form-control bs-timepicker="" data-arrow-behavior="picker" data-length="1" data-minute-step="1" data-time-format="HH:mm" name="time" ng-model="waypoints[$index].time" size="8" type="text" data-bs-show="waypoints[$index].timeshow" trigger="manual" ng-change="updateTimes($index, {{waypoints[$index].time}})"
                 span.input-group-btn
                   button.btn.btn-default type="button" ng-click="waypoints[$index].timeshow = !waypoints[$index].timeshow"
                     i.glyphicon.glyphicon-time
@@ -47,11 +47,11 @@ section#main-content
               div Do:
               div.form-group.col-md-6 
                 div.input-group
-                  input.form-control ng-model="finish.place" g-places-autocomplete="" options="autocompleteOptions" force-selection="true" ng-change="getRoutePointsAndWaypoints()"
+                  input.form-control ng-model="waypoints[waypoints.length-1].place" g-places-autocomplete="" options="autocompleteOptions" force-selection="true" ng-change="getRoutePointsAndWaypoints()"
               div.input-group.col-md-5
-                input.form-control bs-timepicker="" data-arrow-behavior="picker" data-length="1" data-minute-step="1" data-time-format="HH:mm" name="time" ng-model="finish.time" size="8" type="text" data-bs-show="finish.timeshow" trigger="manual" ng-change="checkFinishTime({{finish.time}})"
+                input.form-control bs-timepicker="" data-arrow-behavior="picker" data-length="1" data-minute-step="1" data-time-format="HH:mm" name="time" ng-model="waypoints[waypoints.length-1].time" size="8" type="text" data-bs-show="waypoints[waypoints.length-1].timeshow" trigger="manual" ng-change="updateTimes(waypoints.length-1, {{waypoints[waypoints.length-1].time}})"
                 span.input-group-btn
-                  button.btn.btn-default type="button" ng-click="finish.timeshow = !finish.timeshow"
+                  button.btn.btn-default type="button" ng-click="waypoints[waypoints.length-1].timeshow = !waypoints[waypoints.length-1].timeshow"
                     i.glyphicon.glyphicon-time
           
         .row
