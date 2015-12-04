@@ -224,7 +224,7 @@ class Journey < ActiveRecord::Base
     waypoints[start..finish].each do |waypoint|
       result['waypoints'].push(waypoint.format)
     end
-    result['user'] = driver.username
+    result['user'] = driver.as_json
     result
   end
 end

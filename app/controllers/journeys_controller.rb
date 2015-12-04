@@ -9,9 +9,7 @@ class JourneysController < ApplicationController
   end
 
   def search
-    parameters = search_params
-    result = Journey.search_journeys(parameters)
-
+    result = Journey.search_journeys(search_params)
     render json: { status: :ok, journey: result }
   rescue StandardError => e
     render json: { status: :unprocessable_entity, error: e.to_s }

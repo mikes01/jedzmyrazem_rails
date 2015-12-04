@@ -6,10 +6,14 @@ angular.module 'JedzmyrazemApp'
     $scope.timeshow = false
     $scope.startPlace = null
     $scope.finishPlace = null
+    $scope.dateOptions =
+      formatYear: 'yy'
+      startingDay: 1
+    $scope.format = 'dd.MM.yyyy'
+    $scope.status = opened: false
 
     $scope.today = ->
       $scope.dt = new Date
-      
 
     $scope.today()
 
@@ -28,12 +32,6 @@ angular.module 'JedzmyrazemApp'
     $scope.setDate = (year, month, day) ->
       $scope.dt = new Date(year, month, day)
 
-    $scope.dateOptions =
-      formatYear: 'yy'
-      startingDay: 1
-    $scope.format = 'dd.MM.yyyy'
-    $scope.status = opened: false
-
     $scope.search = () ->
       if checkParameters()
         params = {date: moment($scope.dt).format("YYYY-MM-DD"),
@@ -42,7 +40,6 @@ angular.module 'JedzmyrazemApp'
         start_lng: $scope.startPlace.geometry.location.lng(),
         finish_lat: $scope.finishPlace.geometry.location.lat(),
         finish_lng: $scope.finishPlace.geometry.location.lng()}
-
         Journey.searchJourney(params).success (data) ->
           $scope.journeys = data.journey
           if data.journey.length < 1
