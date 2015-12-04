@@ -138,7 +138,6 @@ angular.module 'JedzmyrazemApp'
 
         Journey.createJourney(journey).success (data) ->
           toastr.success('Zapisano nowy przejazd.', 'Sukces')
-          $scope.waypoints = []
         .error (data) ->
           toastr.error('Spróbuj ponownie za chwilę.', 'Wystąpił błąd')
 
