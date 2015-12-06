@@ -19,8 +19,8 @@ angular.module 'JedzmyrazemApp'
       componentRestrictions: {country: 'pl'}
 
     $scope.waypoints = []
-    $scope.waypoints.push {time: moment(new Date).add(10, 'm'), place: null}
-    $scope.waypoints.push {time: moment(new Date).add(20, 'm'), place: null}
+    $scope.waypoints.push {time: moment(new Date).add(10, 'm'), place: ""}
+    $scope.waypoints.push {time: moment(new Date).add(20, 'm'), place: ""}
     $scope.spaces = 1
     $scope.pointsCount = 2
 
@@ -51,7 +51,7 @@ angular.module 'JedzmyrazemApp'
 
       i = 0
       while i < $scope.waypoints.length
-        if $scope.waypoints[i].place != null
+        if $scope.waypoints[i].place != ""
           _waypoints.push
             location: $scope.waypoints[i].place.geometry.location
             stopover: true
@@ -137,6 +137,21 @@ angular.module 'JedzmyrazemApp'
           i++
 
         Journey.createJourney(journey).success (data) ->
+          
+          $scope.waypoints.splice(1, $scope.waypoints.length-2)
+          $scope.waypoints[0].place = ""
+          $scope.waypoints[0].time = moment(new Date).add(10, 'm')
+          $scope.waypoints[1].place = ""
+          $scope.waypoints[1].time = moment(new Date).add(20, 'm')
+          $scope.spaces = 1
+          $scope.pointsCount = 2
+          _directionsRenderer.setMap(null)
+          _directionsRenderer = new google.maps.DirectionsRenderer()
+          _directionsRenderer.setMap($scope.map)
+          _directionsRenderer.setOptions
+            draggable: true
+
+
           toastr.success('Zapisano nowy przejazd.', 'Sukces')
         .error (data) ->
           toastr.error('Spróbuj ponownie za chwilę.', 'Wystąpił błąd')
